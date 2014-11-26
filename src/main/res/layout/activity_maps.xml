@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_map"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusableInTouchMode="true"
+    android:onClick="layout_maps_Clicked"
+    android:orientation="vertical" >
+
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true" />
+
+    <FrameLayout
+        android:id="@+id/search_plate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/search_plate_global"
+        android:orientation="horizontal"
+        android:paddingBottom="8.0dip"
+        android:paddingLeft="12.0dip"
+        android:paddingRight="12.0dip"
+        android:paddingTop="8.0dip" >
+
+        <LinearLayout
+            android:id="@+id/search_edit_frame"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <com.logosprog.georgiaguide.CustomAutoCompleteTextView
+                android:id="@+id/autocomplete_country"
+                android:layout_width="0.0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"
+                android:background="@drawable/textfield_search"
+                android:drawablePadding="2.0dip"
+                android:dropDownAnchor="@id/search_plate"
+                android:ellipsize="end"
+                android:imeOptions="actionSearch"
+                android:inputType="text"
+                android:paddingLeft="8.0dip"
+                android:paddingRight="6.0dip"
+                android:selectAllOnFocus="true"
+                android:singleLine="true"
+                android:textColor="@android:color/widget_edittext_dark" />
+
+            <ImageButton
+                android:id="@+id/search_go_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@drawable/btn_search_dialog"
+                android:clickable="true"
+                android:onClick="search_go_btn_OnClick"
+                android:src="@drawable/ic_btn_search" />
+
+            <ImageButton
+                android:id="@+id/search_delete_btn"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/btn_search_dialog"
+                android:clickable="true"
+                android:onClick="search_delete_btn_OnClick"
+                android:src="@drawable/ic_btn_delete" />
+        </LinearLayout>
+    </FrameLayout>
+
+</RelativeLayout>

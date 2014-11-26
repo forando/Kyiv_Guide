@@ -1,0 +1,132 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff"
+    tools:context=".ActivityPlaceDetails" >
+
+    <LinearLayout
+        android:id="@+id/fullscreen_content_details_info"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:paddingTop="10dp"
+        tools:ignore="UselessParent" >
+
+        <ScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start" >
+
+            <LinearLayout
+                android:id="@+id/photo_wrapper"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+            </LinearLayout>
+        </ScrollView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:id="@+id/text_wrapper"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="40dip"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/pd_formated_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textAppearance="?android:attr/textAppearanceLarge" />
+            </LinearLayout>
+
+            <RadioGroup
+                android:id="@+id/travelTypePanel"
+                android:layout_width="fill_parent"
+                android:layout_height="48.0dip"
+                android:layout_marginLeft="2.0dip"
+                android:layout_marginRight="4.0dip"
+                android:layout_marginTop="1.0dip"
+                android:layout_weight="8.0"
+                android:orientation="horizontal" >
+
+                <RadioButton
+                    android:id="@+id/radio_driving"
+                    android:layout_width="0.0dip"
+                    android:layout_height="42.0dip"
+                    android:layout_weight="1.0"
+                    android:background="@drawable/mode_driving"
+                    android:button="@null"
+                    android:onClick="RadioButton_onClick" />
+<!--  
+                <RadioButton
+                    android:id="@+id/radio_transit"
+                    android:layout_width="0.0dip"
+                    android:layout_height="42.0dip"
+                    android:layout_weight="1.0"
+                    android:background="@drawable/mode_transit"
+                    android:button="@null"
+                    android:onClick="RadioButton_onClick" />
+
+                <RadioButton
+                    android:id="@+id/radio_bicycling"
+                    android:layout_width="0.0dip"
+                    android:layout_height="42.0dip"
+                    android:layout_weight="1.0"
+                    android:background="@drawable/mode_bike"
+                    android:button="@null"
+                    android:onClick="RadioButton_onClick" />
+-->
+                <RadioButton
+                    android:id="@+id/radio_walking"
+                    android:layout_width="0.0dip"
+                    android:layout_height="42.0dip"
+                    android:layout_weight="1.0"
+                    android:background="@drawable/mode_walk"
+                    android:button="@null"
+                    android:onClick="RadioButton_onClick" />
+            </RadioGroup>
+        </LinearLayout>
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/fullscreen_content_map"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true" >
+
+        <LinearLayout
+            style="?buttonBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom|center_horizontal"
+            android:background="@color/black_overlay"
+            android:orientation="horizontal"
+            tools:ignore="UselessParent" >
+
+            <fragment
+                android:id="@+id/map_places"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                class="com.google.android.gms.maps.MapFragment" />
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/map_hide_Bar"
+            style="@style/SearchBar" >
+
+            <Button
+                android:id="@+id/map_hide_button"
+                style="@style/MapHideButton"
+                android:onClick="b_map_hide_OnClick" />
+        </FrameLayout>
+    </FrameLayout>
+
+</FrameLayout>
