@@ -16,17 +16,19 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.logosprog.kyivguide.app.R;
+import com.logosprog.kyivguide.app.activities.controllers.DelegateController;
+import com.logosprog.kyivguide.app.fragments.delegates.MapDelegate;
 
 /**
- * A simple {@link Fragment} subclass.
+ * A {@link Fragment} subclass.<br>
  * Activities that contain this fragment must implement the
- * {@link com.logosprog.kyivguide.app.fragments.Map.MapListener} interface
- * to handle interaction events.
+ * {@link com.logosprog.kyivguide.app.activities.controllers.DelegateController} interface
+ * to handle interaction events.<br>
  * Use the {@link Map#newInstance} factory method to
  * create an instance of this fragment.
  *
  */
-public class Map extends Fragment {
+public class Map extends Fragment implements MapDelegate {
 
     Context context;
 
@@ -82,17 +84,23 @@ public class Map extends Fragment {
             return null;
         }
         // Inflate the layout for this fragment
-        View fragment;
-        fragment = inflater.inflate(R.layout.fragment_map, container, false);
+        View fragment = inflater.inflate(R.layout.fragment_map, container, false);
 
         setUpMapIfNeeded();
         return fragment;
     }
 
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        final MapListener listener = (MapListener) getActivity();
+        listener.registerMapDelegate(this);
+    }
+
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+            //mListener.onFragmentInteraction(uri);
         }
     }
 
@@ -106,6 +114,7 @@ public class Map extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
+            // TODO: uncomment this later
             //mListener = (MapListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
@@ -156,6 +165,16 @@ public class Map extends Fragment {
         mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lon)).title("Marker"));
     }
 
+    @Override
+    public void moveTo(double lat, double lon) {
+
+    }
+
+    @Override
+    public void clearMap() {
+        mMap.clear();
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -167,8 +186,7 @@ public class Map extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface MapListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri);
+        public void registerMapDelegate(MapDelegate delegate);
     }
 
 }
