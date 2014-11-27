@@ -367,9 +367,8 @@ public class Main extends Base {
 		//Uri.parse("http://maps.google.com/maps?saddr=20.344,34.34&daddr=20.5666,45.345"));
 			startActivity(intent);
 		*/
-        /*Intent intent = new Intent(this, Maps.class);
+        Intent intent = new Intent(this, Maps.class);
         startActivity(intent);
-*/
     }
 
     public void b_places_Clicked(View v){
