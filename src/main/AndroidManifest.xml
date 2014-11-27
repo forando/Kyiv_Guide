@@ -39,10 +39,7 @@
         <!-- DeBug API Key -->
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyAk-zDqFwlenyFSOq2i7Brloqix0F4_qLQ" />
-        <!--<meta-data
-            android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyAqjImpEAZsaR-j5O6bRRZf5RMoa-LnEaU"/>-->
+            android:value="AIzaSyCHu2UY1W0YEf5OhHExWe35pifAUVXCZBA" />
         <meta-data android:name="com.google.android.gms.version"
                    android:value="@integer/google_play_services_version" />
 

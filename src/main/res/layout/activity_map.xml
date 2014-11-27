@@ -7,21 +7,21 @@
                 android:onClick="layout_maps_Clicked"
                 android:orientation="vertical" >
 
-    <!--<FrameLayout
+    <FrameLayout
         android:id="@+id/frame_map"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"></FrameLayout>-->
-    <fragment
+        android:layout_alignParentTop="true"></FrameLayout>
+    <!--<fragment
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.MapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"/>
+        android:layout_alignParentTop="true"/>-->
     <FrameLayout
         android:id="@+id/frame_search"
         android:layout_width="match_parent"
