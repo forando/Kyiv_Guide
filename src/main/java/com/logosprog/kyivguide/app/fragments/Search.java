@@ -2,7 +2,6 @@ package com.logosprog.kyivguide.app.fragments;
 
 import android.app.Activity;
 import android.content.Context;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -19,7 +18,6 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import com.logosprog.kyivguide.app.App;
 import com.logosprog.kyivguide.app.R;
-import com.logosprog.kyivguide.app.services.PlaceSearch;
 import com.logosprog.kyivguide.app.services.PlacesService;
 
 import java.util.HashMap;
@@ -36,7 +34,7 @@ import java.util.List;
  */
 public class Search extends Fragment implements OnItemClickListener {
 
-    Context context;
+    Context activityContext;
 
     private static final String ARG_REGION = "region";
     private static final String ARG_RADIUS = "radius";
@@ -48,6 +46,9 @@ public class Search extends Fragment implements OnItemClickListener {
     private SearchListener mListener;
 
     View fragment;
+    /**
+     * The input field for user to fill in with some searching objects
+     */
     AutoCompleteTextView input;
     ImageButton bGo;
     ImageButton bDelete;
@@ -81,7 +82,7 @@ public class Search extends Fragment implements OnItemClickListener {
         if (getArguments() != null) {
             region = getArguments().getString(ARG_REGION);
             radius = getArguments().getInt(ARG_RADIUS);
-            context = getActivity();
+            activityContext = getActivity();
         }
     }
 
@@ -110,14 +111,14 @@ public class Search extends Fragment implements OnItemClickListener {
 
             @Override
             public void afterTextChanged(Editable s) {
-                // TODO Auto-generated method stub
+                // dummy
 
             }
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count,
                                           int after) {
-                // TODO Auto-generated method stub
+                // dummy
 
             }
 
@@ -137,17 +138,16 @@ public class Search extends Fragment implements OnItemClickListener {
             @Override
             public boolean onEditorAction(TextView v, int actionID, KeyEvent event) {
                 if (actionID == EditorInfo.IME_ACTION_SEARCH){
+
+                    mListener.onSearch();
+
                     if(!input.getText().toString().equals("")){
-                        mMap.clear();
-                        new PlaceSearch(context, PlacesService.TEXT_SEARCH, mMap, tempLocation, input.getText().toString(), "dummy_text").execute();
+                        mListener.onSearchText(input.getText().toString());
                     }
 
                     //hide keyboard
-                    InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                    InputMethodManager imm = (InputMethodManager) activityContext.getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(input.getWindowToken(), 0);
-
-                    //remove focus frome searchBar
-                    findViewById(R.id.layout_map).requestFocus();
 
                     return true;
                 }else{
@@ -158,22 +158,14 @@ public class Search extends Fragment implements OnItemClickListener {
         input.setOnItemClickListener(this);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            // TODO: uncomment this later
-            //mListener = (SearchListener) activity;
+            mListener = (SearchListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
+                    + " must implement SearchListener");
         }
     }
 
@@ -183,15 +175,42 @@ public class Search extends Fragment implements OnItemClickListener {
         mListener = null;
     }
 
+    public void bGo_OnClick(View v) {
+
+        if(!input.getText().toString().equals("")){
+            mListener.onSearchText(input.getText().toString());
+            //hide keyboard
+            InputMethodManager imm = (InputMethodManager) activityContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(input.getWindowToken(), 0);
+
+            //remove focus frome searchBar
+            mListener.onSearch();
+        }
+    }
+
+    public void bDelete_OnClick(View v) {
+
+        input.setText("");
+
+        ViewGroup.LayoutParams btn_delete_params = bDelete.getLayoutParams();
+        btn_delete_params.width = 0;
+        bDelete.setLayoutParams(btn_delete_params);
+
+        ViewGroup.LayoutParams btn_go_params = bGo.getLayoutParams();
+        btn_go_params.width = ViewGroup.LayoutParams.WRAP_CONTENT;
+        bGo.setLayoutParams(btn_go_params);
+    }
+
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+
+        mListener.onSearch();
+
         HashMap<String, String> hm = (HashMap<String, String>) adapterView.getItemAtPosition(position);
 
         //hide keyboard
-        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager imm = (InputMethodManager) activityContext.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(input.getWindowToken(), 0);
-
-        findViewById(R.id.layout_map).requestFocus();
 
         ViewGroup.LayoutParams btn_go_params = bGo.getLayoutParams();
         btn_go_params.width = 0;
@@ -202,10 +221,8 @@ public class Search extends Fragment implements OnItemClickListener {
         bDelete.setLayoutParams(btn_delete_params);
 
         if(!input.getText().toString().equals("")){
-            mMap.clear();
             String referense = hm.get("reference");
-            new PlaceDetails(context, mMap, referense, "dummy_text").execute();
-            //new PlaceSearch(context, PlacesService.TEXT_SEARCH, mMap, tempLocation, input.getText().toString(), "dummy_text").execute();
+            mListener.onReference(referense);
         }
 
         //Toast.makeText(this, hm.get("description"), Toast.LENGTH_SHORT).show();
@@ -235,7 +252,7 @@ public class Search extends Fragment implements OnItemClickListener {
                 int[] TO = new int[] { R.id.text1 };
 
                 // Creating a SimpleAdapter for the AutoCompleteTextView
-                s_adapter = new SimpleAdapter(context, predictions,
+                s_adapter = new SimpleAdapter(activityContext, predictions,
                         R.layout.list_maps_row, FROM, TO);
 
                 // Setting the adapter
@@ -260,8 +277,24 @@ public class Search extends Fragment implements OnItemClickListener {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface SearchListener {
-        // TODO: Update argument type and name
-        public void onSearch(Uri uri);
+        /**
+         * Notifies whenever user has requested to search some objects defined in
+         * {@link com.logosprog.kyivguide.app.fragments.Search#input}.
+         */
+        public void onSearch();
+
+        /**
+         * Notifies when a new reference has been requested.
+         * @param reference Specific google.places ID that must be used in google.places request to return
+         *                  desired results.
+         */
+        public void onReference(String reference);
+
+        /**
+         * Notifies when a nex text search has been requested
+         * @param text Searched objects described in text form
+         */
+        public void onSearchText(String text);
     }
 
 }

@@ -8,4 +8,6 @@ package com.logosprog.kyivguide.app.fragments.delegates;
 public interface MapDelegate {
     public void moveTo(double lat, double lon);
     public void clearMap();
+    public void searchReference(String reference);
+    public void searchText(String text);
 }

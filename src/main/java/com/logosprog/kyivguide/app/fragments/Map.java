@@ -2,22 +2,28 @@ package com.logosprog.kyivguide.app.fragments;
 
 import android.app.Activity;
 import android.content.Context;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.widget.FrameLayout;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.logosprog.kyivguide.app.R;
-import com.logosprog.kyivguide.app.activities.controllers.DelegateController;
 import com.logosprog.kyivguide.app.fragments.delegates.MapDelegate;
+import com.logosprog.kyivguide.app.services.PlaceDetails;
+import com.logosprog.kyivguide.app.services.PlaceSearch;
+import com.logosprog.kyivguide.app.services.PlacesService;
 
 /**
  * A {@link Fragment} subclass.<br>
@@ -30,7 +36,9 @@ import com.logosprog.kyivguide.app.fragments.delegates.MapDelegate;
  */
 public class Map extends Fragment implements MapDelegate {
 
-    Context context;
+    private static final String TAG = "MapFragment";
+
+    Context activityContext;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -43,6 +51,10 @@ public class Map extends Fragment implements MapDelegate {
 
     private MapListener mListener;
 
+    private UiSettings mUiSettings;
+    private LocationManager locationManager;
+    private Location loc;
+    private Location tempLocation;
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
 
     /**
@@ -72,7 +84,7 @@ public class Map extends Fragment implements MapDelegate {
         if (getArguments() != null) {
             lat = getArguments().getDouble(ARG_LATITUDE);
             lon = getArguments().getDouble(ARG_LONGITUDE);
-            context = getActivity();
+            activityContext = getActivity();
         }
     }
 
@@ -86,6 +98,10 @@ public class Map extends Fragment implements MapDelegate {
         // Inflate the layout for this fragment
         View fragment = inflater.inflate(R.layout.fragment_map, container, false);
 
+        tempLocation = new Location("dummyprovider");
+        tempLocation.setLatitude(lat);
+        tempLocation.setLongitude(lon);
+
         setUpMapIfNeeded();
         return fragment;
     }
@@ -95,12 +111,11 @@ public class Map extends Fragment implements MapDelegate {
         super.onActivityCreated(savedInstanceState);
         final MapListener listener = (MapListener) getActivity();
         listener.registerMapDelegate(this);
-    }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            //mListener.onFragmentInteraction(uri);
+        if (mMap != null) {
+            mUiSettings = mMap.getUiSettings();
+            mUiSettings.setCompassEnabled(false);
+            // mUiSettings = mMap.getUiSettings();
         }
     }
 
@@ -174,6 +189,64 @@ public class Map extends Fragment implements MapDelegate {
     public void clearMap() {
         mMap.clear();
     }
+
+    @Override
+    public void searchReference(String reference) {
+        new PlaceDetails(activityContext, mMap, reference, "dummy_text").execute();
+    }
+
+    @Override
+    public void searchText(String text) {
+        new PlaceSearch(activityContext, PlacesService.TEXT_SEARCH, mMap, tempLocation,
+                text, "dummy_text").execute();
+    }
+
+    private void currentLocation() {
+        locationManager = (LocationManager) activityContext.getSystemService(Context.LOCATION_SERVICE);
+
+        String provider = locationManager
+                .getBestProvider(new Criteria(), false);
+
+        Location location = locationManager.getLastKnownLocation(provider);
+
+        if (location == null) {
+            locationManager.requestLocationUpdates(provider, 0, 0, listener);
+        } else {
+            loc = location;
+            Log.e(TAG, "location : " + location);
+        }
+
+    }
+
+    private LocationListener listener = new LocationListener() {
+
+        @Override
+        public void onLocationChanged(Location location) {
+            Log.e(TAG, "location update : " + location);
+            loc = location;
+            locationManager.removeUpdates(listener);
+
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+            // TODO Auto-generated method stub
+
+        }
+
+    };
 
     /**
      * This interface must be implemented by activities that contain this

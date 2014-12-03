@@ -4,13 +4,11 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
 import com.logosprog.kyivguide.app.App;
 import com.logosprog.kyivguide.app.R;
-import com.logosprog.kyivguide.app.activities.controllers.DelegateController;
 import com.logosprog.kyivguide.app.fragments.Map;
 import com.logosprog.kyivguide.app.fragments.Search;
 import com.logosprog.kyivguide.app.fragments.delegates.MapDelegate;
@@ -45,9 +43,21 @@ public class Maps extends Activity implements Map.MapListener, Search.SearchList
     }
 
     @Override
-    public void onSearch(Uri uri) {
+    public void onSearch() {
+        //remove focus from searchBar
         main_layout.requestFocus();
+    }
+
+    @Override
+    public void onReference(String reference) {
         mapDelegate.clearMap();
+        mapDelegate.searchReference(reference);
+    }
+
+    @Override
+    public void onSearchText(String text) {
+        mapDelegate.clearMap();
+        mapDelegate.searchText(text);
     }
 
     @Override
