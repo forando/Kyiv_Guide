@@ -14,9 +14,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.logosprog.kyivguide.app.R;
@@ -178,6 +180,17 @@ public class Map extends Fragment implements MapDelegate {
      */
     private void setUpMap() {
         mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lon)).title("Marker"));
+        currentLocation();
+
+        CameraPosition cameraPosition = new CameraPosition.Builder()
+                .target(new LatLng(41.69275175761847, 44.81409441679716))
+                        // .target(new LatLng(loc.getLatitude(), loc.getLongitude())) //
+                        // Sets the center of the map to Mountain View
+                .zoom(14) // Sets the zoom
+                .tilt(30) // Sets the tilt of the camera to 30 degrees
+                .build(); // Creates a CameraPosition from the builder
+        mMap.animateCamera(CameraUpdateFactory
+                .newCameraPosition(cameraPosition));
     }
 
     @Override

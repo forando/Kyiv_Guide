@@ -38,5 +38,8 @@
     <string name="title_activity_maps">Maps</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_maps_test">Map</string>
+    <string name="title_activity_test">Test</string>
+    <string name="search_button">search button</string>
+    <string name="delete_button">delete button</string>
 
 </resources>

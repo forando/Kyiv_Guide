@@ -6,7 +6,6 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.WindowManager;
-import android.widget.RelativeLayout;
 import com.logosprog.kyivguide.app.App;
 import com.logosprog.kyivguide.app.R;
 import com.logosprog.kyivguide.app.fragments.Map;
@@ -18,7 +17,7 @@ import com.logosprog.kyivguide.app.fragments.delegates.MapDelegate;
  */
 public class Maps extends Activity implements Map.MapListener, Search.SearchListener {
 
-    RelativeLayout main_layout;
+    //RelativeLayout main_layout;
 
     MapDelegate mapDelegate;
 
@@ -31,7 +30,7 @@ public class Maps extends Activity implements Map.MapListener, Search.SearchList
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        main_layout = (RelativeLayout)findViewById(R.id.layout_maps);
+        //main_layout = (RelativeLayout)findViewById(R.id.layout_maps);
 
         final FragmentManager manager = getFragmentManager();
         final FragmentTransaction transaction = manager.beginTransaction();
@@ -40,12 +39,16 @@ public class Maps extends Activity implements Map.MapListener, Search.SearchList
         transaction.replace(R.id.frame_map, map, "map");
         transaction.replace(R.id.frame_search, search, "search");
         transaction.commit();
+        /*getFragmentManager().beginTransaction()
+                .add(R.id.frame_search, new Test.PlaceholderFragment())
+                .commit();*/
+
     }
 
     @Override
     public void onSearch() {
         //remove focus from searchBar
-        main_layout.requestFocus();
+        //main_layout.requestFocus();
     }
 
     @Override

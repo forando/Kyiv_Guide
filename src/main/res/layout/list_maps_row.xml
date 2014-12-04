@@ -14,5 +14,4 @@
         android:paddingStart="?android:attr/listPreferredItemPaddingStart"
         android:textAppearance="?android:attr/textAppearanceListItemSmall"
         android:textColor="@android:color/widget_edittext_dark" />
-
 </LinearLayout>

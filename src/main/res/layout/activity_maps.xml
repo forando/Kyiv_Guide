@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal" >
 
-            <com.logosprog.georgiaguide.CustomAutoCompleteTextView
+            <com.logosprog.kyivguide.app.fragments.CustomAutoCompleteTextView
                 android:id="@+id/autocomplete_country"
                 android:layout_width="0.0dip"
                 android:layout_height="wrap_content"

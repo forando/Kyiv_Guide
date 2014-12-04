@@ -26,7 +26,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link com.logosprog.kyivguide.app.fragments.Search.SearchListener} interface
+ * {@link Search.SearchListener} interface
  * to handle interaction events.
  * Use the {@link Search#newInstance} factory method to
  * create an instance of this fragment.
@@ -39,13 +39,13 @@ public class Search extends Fragment implements OnItemClickListener {
     private static final String ARG_REGION = "region";
     private static final String ARG_RADIUS = "radius";
 
-    // TODO: Rename and change types of parameters
     private String region;
     private int radius;
 
     private SearchListener mListener;
 
     View fragment;
+    LinearLayout fragmentContainer;
     /**
      * The input field for user to fill in with some searching objects
      */
@@ -54,6 +54,7 @@ public class Search extends Fragment implements OnItemClickListener {
     ImageButton bDelete;
 
     SimpleAdapter s_adapter;
+    //ArrayAdapter<String> adapter;
 
     /**
      * Use this factory method to create a new instance of
@@ -63,7 +64,6 @@ public class Search extends Fragment implements OnItemClickListener {
      * @param r Radius.
      * @return A new instance of fragment Search.
      */
-    // TODO: Rename and change types and number of parameters
     public static Search newInstance(String reg, int r) {
         Search fragment = new Search();
         Bundle args = new Bundle();
@@ -95,9 +95,32 @@ public class Search extends Fragment implements OnItemClickListener {
         }
         // Inflate the layout for this fragment
         fragment = inflater.inflate(R.layout.fragment_search, container, false);
-        input = (AutoCompleteTextView) fragment.findViewById(R.id.autocomplete_country);
+        fragmentContainer = (LinearLayout) fragment.findViewById(R.id.search_edit_frame);
+        input = (AutoCompleteTextView) fragment.findViewById(R.id.autocomplete_search);
+
+        /*String[] countries = getResources().getStringArray(
+                R.array.countries_array);
+
+		adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1,countries);
+
+        input.setAdapter(adapter);*/
+
         bGo = (ImageButton) fragment.findViewById(R.id.search_go_btn);
         bDelete = (ImageButton) fragment.findViewById(R.id.search_delete_btn);
+
+        bGo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                bGo_OnClick();
+            }
+        });
+
+        bDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                bDelete_OnClick();
+            }
+        });
 
         setupInput();
 
@@ -139,7 +162,7 @@ public class Search extends Fragment implements OnItemClickListener {
             public boolean onEditorAction(TextView v, int actionID, KeyEvent event) {
                 if (actionID == EditorInfo.IME_ACTION_SEARCH){
 
-                    mListener.onSearch();
+                    fragmentContainer.requestFocus();
 
                     if(!input.getText().toString().equals("")){
                         mListener.onSearchText(input.getText().toString());
@@ -175,8 +198,7 @@ public class Search extends Fragment implements OnItemClickListener {
         mListener = null;
     }
 
-    public void bGo_OnClick(View v) {
-
+    private void bGo_OnClick() {
         if(!input.getText().toString().equals("")){
             mListener.onSearchText(input.getText().toString());
             //hide keyboard
@@ -184,12 +206,19 @@ public class Search extends Fragment implements OnItemClickListener {
             imm.hideSoftInputFromWindow(input.getWindowToken(), 0);
 
             //remove focus frome searchBar
-            mListener.onSearch();
+            fragmentContainer.requestFocus();
+
+            ViewGroup.LayoutParams btn_delete_params = bDelete.getLayoutParams();
+            btn_delete_params.width = ViewGroup.LayoutParams.WRAP_CONTENT;
+            bDelete.setLayoutParams(btn_delete_params);
+
+            ViewGroup.LayoutParams btn_go_params = bGo.getLayoutParams();
+            btn_go_params.width = 0;
+            bGo.setLayoutParams(btn_go_params);
         }
     }
 
-    public void bDelete_OnClick(View v) {
-
+    private void bDelete_OnClick() {
         input.setText("");
 
         ViewGroup.LayoutParams btn_delete_params = bDelete.getLayoutParams();
@@ -204,11 +233,12 @@ public class Search extends Fragment implements OnItemClickListener {
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 
-        mListener.onSearch();
 
         HashMap<String, String> hm = (HashMap<String, String>) adapterView.getItemAtPosition(position);
 
         //hide keyboard
+        fragmentContainer.requestFocus();
+
         InputMethodManager imm = (InputMethodManager) activityContext.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(input.getWindowToken(), 0);
 
@@ -252,7 +282,7 @@ public class Search extends Fragment implements OnItemClickListener {
                 int[] TO = new int[] { R.id.text1 };
 
                 // Creating a SimpleAdapter for the AutoCompleteTextView
-                s_adapter = new SimpleAdapter(activityContext, predictions,
+                s_adapter = new SimpleAdapter(getActivity(), predictions,
                         R.layout.list_maps_row, FROM, TO);
 
                 // Setting the adapter
@@ -279,7 +309,7 @@ public class Search extends Fragment implements OnItemClickListener {
     public interface SearchListener {
         /**
          * Notifies whenever user has requested to search some objects defined in
-         * {@link com.logosprog.kyivguide.app.fragments.Search#input}.
+         * {@link Search#input}.
          */
         public void onSearch();
 
@@ -296,5 +326,4 @@ public class Search extends Fragment implements OnItemClickListener {
          */
         public void onSearchText(String text);
     }
-
 }
