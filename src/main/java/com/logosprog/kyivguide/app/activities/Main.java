@@ -368,8 +368,6 @@ public class Main extends Base {
 			startActivity(intent);
 		*/
         Intent intent = new Intent(this, Maps.class);
-        //Intent intent = new Intent(this, ActivityMaps.class);
-        //Intent intent = new Intent(this, Test.class);
         startActivity(intent);
     }
 

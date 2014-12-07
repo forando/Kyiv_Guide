@@ -32,7 +32,7 @@ import java.util.List;
  * create an instance of this fragment.
  *
  */
-public class Search extends Fragment implements OnItemClickListener {
+public class Search extends android.support.v4.app.Fragment implements OnItemClickListener {
 
     Context activityContext;
 
@@ -282,7 +282,7 @@ public class Search extends Fragment implements OnItemClickListener {
                 int[] TO = new int[] { R.id.text1 };
 
                 // Creating a SimpleAdapter for the AutoCompleteTextView
-                s_adapter = new SimpleAdapter(getActivity(), predictions,
+                s_adapter = new SimpleAdapter(activityContext, predictions,
                         R.layout.list_maps_row, FROM, TO);
 
                 // Setting the adapter

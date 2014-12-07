@@ -102,7 +102,7 @@
         android:layout_height="match_parent"
         android:fitsSystemWindows="true" >
 
-        <LinearLayout
+        <!--<LinearLayout
             style="?buttonBarStyle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -116,7 +116,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 class="com.google.android.gms.maps.MapFragment" />
-        </LinearLayout>
+        </LinearLayout>-->
+
+        <FrameLayout
+            android:id="@+id/place_details_frame_map"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"></FrameLayout>
 
         <FrameLayout
             android:id="@+id/map_hide_Bar"

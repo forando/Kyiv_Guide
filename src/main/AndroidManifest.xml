@@ -62,15 +62,14 @@
             android:theme="@style/FullscreenTheme" >
         </activity>
         <activity
-            android:name=".activities.ActivityMaps"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/app_name"
-            android:theme="@style/FullscreenTheme" >
+            android:name=".activities.PlaceDetails"
+            android:label="@string/title_activity_activity_place_details" >
         </activity>
         <activity
             android:name=".activities.Test"
             android:label="@string/title_activity_test" >
         </activity>
+
     </application>
 
 </manifest>

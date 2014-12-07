@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -162,11 +163,10 @@ public class PlaceDetails extends AsyncTask<Void, Void, Place> implements OnMark
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-        //todo: uncomment this later:
-        /*Place p = markerPlaces.get(marker);
-        Intent i = new Intent(context, ActivityPlaceDetails.class);
+        Place p = markerPlaces.get(marker);
+        Intent i = new Intent(context, com.logosprog.kyivguide.app.activities.PlaceDetails.class);
         i.putExtra("reference", p.getReference());
-        context.startActivity(i);*/
+        context.startActivity(i);
 
     }
 

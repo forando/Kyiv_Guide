@@ -2,52 +2,48 @@ package com.logosprog.kyivguide.app.fragments;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.app.Fragment;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.UiSettings;
-import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.*;
+import com.google.android.gms.maps.model.*;
+import com.logosprog.kyivguide.app.App;
 import com.logosprog.kyivguide.app.R;
 import com.logosprog.kyivguide.app.fragments.delegates.MapDelegate;
-import com.logosprog.kyivguide.app.services.PlaceDetails;
-import com.logosprog.kyivguide.app.services.PlaceSearch;
-import com.logosprog.kyivguide.app.services.PlacesService;
+import com.logosprog.kyivguide.app.services.*;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
- * A {@link Fragment} subclass.<br>
- * Activities that contain this fragment must implement the
- * {@link com.logosprog.kyivguide.app.activities.controllers.DelegateController} interface
- * to handle interaction events.<br>
+ * A {@link com.google.android.gms.maps.SupportMapFragment} subclass.<br>
+ *     Activities that contain this fragment must implement
+ *     {@link com.logosprog.kyivguide.app.fragments.Map.MapListener}
+ *     interface.
  * Use the {@link Map#newInstance} factory method to
  * create an instance of this fragment.
  *
  */
-public class Map extends Fragment implements MapDelegate {
+public class Map extends SupportMapFragment implements MapDelegate {
 
     private static final String TAG = "MapFragment";
 
     Context activityContext;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_LATITUDE = "lat";
     private static final String ARG_LONGITUDE = "lon";
 
-    // TODO: Rename and change types of parameters
     private double lat;
     private double lon;
 
@@ -67,7 +63,6 @@ public class Map extends Fragment implements MapDelegate {
      * @param lon The kiosk longitude.
      * @return A new instance of fragment Map.
      */
-    // TODO: Rename and change types and number of parameters
     public static Map newInstance(double lat, double lon) {
         Map fragment = new Map();
         Bundle args = new Bundle();
@@ -77,7 +72,7 @@ public class Map extends Fragment implements MapDelegate {
         return fragment;
     }
     public Map() {
-        // Required empty public constructor
+        super();
     }
 
     @Override
@@ -98,7 +93,8 @@ public class Map extends Fragment implements MapDelegate {
             return null;
         }
         // Inflate the layout for this fragment
-        View fragment = inflater.inflate(R.layout.fragment_map, container, false);
+        //View fragment = inflater.inflate(R.layout.fragment_map, container, false);
+        View fragment = super.onCreateView(inflater, container, savedInstanceState);
 
         tempLocation = new Location("dummyprovider");
         tempLocation.setLatitude(lat);
@@ -113,12 +109,6 @@ public class Map extends Fragment implements MapDelegate {
         super.onActivityCreated(savedInstanceState);
         final MapListener listener = (MapListener) getActivity();
         listener.registerMapDelegate(this);
-
-        if (mMap != null) {
-            mUiSettings = mMap.getUiSettings();
-            mUiSettings.setCompassEnabled(false);
-            // mUiSettings = mMap.getUiSettings();
-        }
     }
 
     @Override
@@ -131,8 +121,7 @@ public class Map extends Fragment implements MapDelegate {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            // TODO: uncomment this later
-            //mListener = (MapListener) activity;
+            mListener = (MapListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -163,14 +152,17 @@ public class Map extends Fragment implements MapDelegate {
     private void setUpMapIfNeeded() {
         // Do a null check to confirm that we have not already instantiated the map.
         if (mMap == null) {
-            // Try to obtain the map from the SupportMapFragment.
-            mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
-            // Check if we were successful in obtaining the map.
+            Log.d(TAG, "Set up Map!");
+            mMap = getMap();
+            mUiSettings = mMap.getUiSettings();
+            mUiSettings.setCompassEnabled(false);
+            // mUiSettings = mMap.getUiSettings();
             if (mMap != null) {
                 setUpMap();
             }
         }
     }
+
 
     /**
      * This is where we can add markers or lines, add listeners or move the camera. In this case, we
@@ -214,6 +206,11 @@ public class Map extends Fragment implements MapDelegate {
                 text, "dummy_text").execute();
     }
 
+    @Override
+    public void getDirections(Place place, String mode) {
+        new getDirections(place, mode).execute();
+    }
+
     private void currentLocation() {
         locationManager = (LocationManager) activityContext.getSystemService(Context.LOCATION_SERVICE);
 
@@ -243,23 +240,100 @@ public class Map extends Fragment implements MapDelegate {
 
         @Override
         public void onProviderDisabled(String provider) {
-            // TODO Auto-generated method stub
 
         }
 
         @Override
         public void onProviderEnabled(String provider) {
-            // TODO Auto-generated method stub
 
         }
 
         @Override
         public void onStatusChanged(String provider, int status, Bundle extras) {
-            // TODO Auto-generated method stub
 
         }
 
     };
+
+    private class getDirections extends AsyncTask<Void, Void, List<List<HashMap<String,String>>>> {
+
+        private DirectionsService directionsService;
+
+        Place place;
+        private final LatLng origin;
+        private final LatLng dest;
+
+        public getDirections(Place _place, String _mode){
+            this.origin = new LatLng(App.LATITUDE, App.LONGITUDE);
+            this.dest = new LatLng(_place.getLatitude(), _place.getLongitude());
+            this.place = _place;
+            directionsService = new DirectionsService(origin, dest, null, _mode);
+        }
+
+
+
+        @Override
+        protected List<List<HashMap<String, String>>> doInBackground(Void... params) {
+            return directionsService.getRoutes();
+        }
+
+
+
+        @Override
+        protected void onPostExecute(List<List<HashMap<String, String>>> routes) {
+            super.onPostExecute(routes);
+            int route = 0;
+            int _latlong = 0;
+            List<LatLng> points = new ArrayList<LatLng>();
+            for (List<HashMap<String, String>> path : routes) {
+                route++;
+                for(HashMap<String, String> hm_latlong : path){
+                    points.add(new LatLng(Double.parseDouble(hm_latlong.get("lat")),
+                            Double.parseDouble(hm_latlong.get("lng"))));
+                    _latlong++;
+
+                    Log.d(TAG, "Route#" + route + ", Point#" + _latlong + ", Latitude = " + hm_latlong.get("lat") +
+                            ", Longitude = " + hm_latlong.get("lng"));
+                }
+            }
+            mMap.addPolyline(new PolylineOptions()
+                    .addAll(points)
+                    .width(7)
+                    .color(Color.BLUE)
+                    .geodesic(true));//ïîâòîðÿåò êðèâèçíó Çåìëè
+
+            addEndPointMarker(origin, R.drawable.ic_maps_indicator_startpoint_route,
+                    "You are here", "InfoBox location");
+            addEndPointMarker(dest, R.drawable.ic_maps_indicator_endpoint_route,
+                    place.getName(), place.getFormattedAddress());
+
+            mListener.showMap();
+
+            CameraPosition cameraPosition;
+            cameraPosition = new CameraPosition.Builder()
+                    .target(points.get(0)) // Sets the center of the map to Mountain View
+                    .zoom(14) // Sets the zoom
+                    .tilt(30) // Sets the tilt of the camera to 30 degrees
+                    .build();
+
+            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        }
+
+        private void addEndPointMarker(LatLng point, int icon_res_id, String title, String snippet){
+            // Creating a marker
+            MarkerOptions markerOptions = new MarkerOptions();
+
+            // Setting the position for the marker
+            markerOptions.position(point);
+            markerOptions.icon(BitmapDescriptorFactory.fromResource(icon_res_id));
+            markerOptions.title(title);
+            markerOptions.snippet(snippet);
+
+            // Placing a marker
+            mMap.addMarker(markerOptions);
+        }
+
+    }
 
     /**
      * This interface must be implemented by activities that contain this
@@ -273,6 +347,7 @@ public class Map extends Fragment implements MapDelegate {
      */
     public interface MapListener {
         public void registerMapDelegate(MapDelegate delegate);
+        public void showMap();
     }
 
 }

@@ -204,11 +204,10 @@ public class PlaceSearch extends AsyncTask<Void, Void, ArrayList<PlacesService.P
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-        //todo: uncomment later
-        /*PlacesService.PlaceSearchPoint p = markerPlaces.get(marker);
-        Intent i = new Intent(context, ActivityPlaceDetails.class);
+        PlacesService.PlaceSearchPoint p = markerPlaces.get(marker);
+        Intent i = new Intent(context, com.logosprog.kyivguide.app.activities.PlaceDetails.class);
         i.putExtra("reference", p.getReference());
-        context.startActivity(i);*/
+        context.startActivity(i);
 
     }
 
