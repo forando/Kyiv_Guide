@@ -1,5 +1,6 @@
 package com.logosprog.kyivguide.app.fragments.delegates;
 
+import android.location.Location;
 import com.logosprog.kyivguide.app.services.Place;
 
 /**
@@ -22,6 +23,12 @@ public interface MapDelegate {
      * @param text Any user input search criteria.
      */
     public void searchText(String text);
+
+    /**
+     * Provides objects of a specified type.
+     * @param placeType One of a google.place specified place types see google docs.
+     */
+    public void searchNearBy(String placeType, String buttonName);
 
     /**
      * Provides polyline to show the way to get to the destination point.

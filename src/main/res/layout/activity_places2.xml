@@ -1,0 +1,227 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff"
+    tools:context="com.logosprog.kyivguide.app.activities.Places" >
+
+    <LinearLayout
+        android:id="@+id/fullscreen_content"
+        style="?buttonBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="bottom|center_horizontal"
+        android:orientation="horizontal"
+        android:weightSum="4"
+        tools:ignore="UselessParent" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingBottom="15dp"
+            android:paddingTop="30dp" >
+
+            <Button
+                android:id="@+id/b_place_see"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@null"
+                android:drawableTop="@drawable/places_cat_icon_see_selector"
+                android:onClick="b2_OnClick"
+                android:text="See" />
+
+            <Button
+                android:id="@+id/b_place_hotels"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@null"
+                android:drawableTop="@drawable/places_cat_icon_hotels_selector"
+                android:onClick="b2_OnClick"
+                android:text="Hotels" />
+
+            <Button
+                android:id="@+id/b_place_atm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@null"
+                android:drawableTop="@drawable/places_cat_icon_atm_selector"
+                android:onClick="b2_OnClick"
+                android:text="ATM" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingBottom="15dp"
+            android:paddingTop="30dp" >
+
+            <Button
+                android:id="@+id/b_place_attractions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@null"
+                android:drawableTop="@drawable/places_cat_icon_attractions_selector"
+                android:onClick="b2_OnClick"
+                android:text="Attractions" />
+
+            <Button
+                android:id="@+id/b_place_cafe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@null"
+                android:drawableTop="@drawable/places_cat_icon_cafe_selector"
+                android:onClick="b2_OnClick"
+                android:text="Cafe" />
+
+            <Button
+                android:id="@+id/b_place_bank"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@null"
+                android:drawableTop="@drawable/places_cat_icon_bank_selector"
+                android:onClick="b2_OnClick"
+                android:text="Banks" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingBottom="15dp"
+            android:paddingTop="30dp" >
+
+            <Button
+                android:id="@+id/b_place_shopping"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@null"
+                android:drawableTop="@drawable/places_cat_icon_shopping_selector"
+                android:onClick="b2_OnClick"
+                android:text="Shopping" />
+
+            <Button
+                android:id="@+id/b_place_bars"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@null"
+                android:drawableTop="@drawable/places_cat_icon_bars_selector"
+                android:onClick="b2_OnClick"
+                android:text="Bars" />
+
+            <Button
+                android:id="@+id/b_place_airport"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@null"
+                android:drawableTop="@drawable/places_cat_icon_airport_selector"
+                android:onClick="b2_OnClick"
+                android:text="Airport" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingBottom="15dp"
+            android:paddingTop="30dp" >
+
+            <Button
+                android:id="@+id/b_place_beauty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@null"
+                android:drawableTop="@drawable/places_cat_icon_beauty_selector"
+                android:onClick="b2_OnClick"
+                android:text="Beauty" />
+
+            <Button
+                android:id="@+id/b_place_restaurants"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@null"
+                android:drawableTop="@drawable/places_cat_icon_restaurants_selector"
+                android:onClick="b2_OnClick"
+                android:text="Restaurants" />
+
+            <Button
+                android:id="@+id/b_place_gas"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@null"
+                android:drawableTop="@drawable/places_cat_icon_gas_selector"
+                android:onClick="b2_OnClick"
+                android:text="Gas" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/fullscreen_content_controls"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true" >
+
+        <LinearLayout
+            style="?buttonBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom|center_horizontal"
+            android:background="@color/black_overlay"
+            android:orientation="horizontal"
+            tools:ignore="UselessParent" >
+
+            <!--<fragment
+                android:id="@+id/map_places"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                class="com.google.android.gms.maps.MapFragment" />-->
+        </LinearLayout>
+        <FrameLayout
+            android:id="@+id/places_frame_map"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"></FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/map_hide_Bar"
+            style="@style/SearchBar" >
+
+            <Button
+                android:id="@+id/map_hide_button"
+                style="@style/MapHideButton"
+                android:onClick="b_map_hide_OnClick" />
+        </FrameLayout>
+    </FrameLayout>
+
+</FrameLayout>

@@ -82,6 +82,15 @@ public class Map extends SupportMapFragment implements MapDelegate {
             lat = getArguments().getDouble(ARG_LATITUDE);
             lon = getArguments().getDouble(ARG_LONGITUDE);
             activityContext = getActivity();
+
+            /*if (loc != null) {
+                mMap.clear();
+            *//*new GetPlaces(ActivityPlaces.this, "restaurant".toLowerCase().
+                    replace("-", "_").replace(" ", "_"), "restaurant").execute();*//*
+
+                new PlaceSearch(Places.this, PlacesService.NEARBY_SEARCH, mMap,
+                        tempLocation, "restaurant", PlaceSearch.PLACE_RESTAURANTS).execute();
+            }*/
         }
     }
 
@@ -114,7 +123,7 @@ public class Map extends SupportMapFragment implements MapDelegate {
     @Override
     public void onResume() {
         super.onResume();
-        //setUpMapIfNeeded();
+        setUpMapIfNeeded();
     }
 
     @Override
@@ -204,6 +213,15 @@ public class Map extends SupportMapFragment implements MapDelegate {
     public void searchText(String text) {
         new PlaceSearch(activityContext, PlacesService.TEXT_SEARCH, mMap, tempLocation,
                 text, "dummy_text").execute();
+    }
+
+    @Override
+    public void searchNearBy(String placeType, String buttonName) {
+        /*if (loc != null){
+            mMap.clear();
+            new PlaceSearch(activityContext, PlacesService.NEARBY_SEARCH, mMap, tempLocation, placeType, buttonName).execute();
+        }*/
+        new PlaceSearch(activityContext, PlacesService.NEARBY_SEARCH, mMap, tempLocation, placeType, buttonName).execute();
     }
 
     @Override

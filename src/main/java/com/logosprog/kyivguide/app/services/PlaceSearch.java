@@ -25,7 +25,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.logosprog.kyivguide.app.R;
-import com.logosprog.kyivguide.app.utils.AdapterInfoWindow;
 
 public class PlaceSearch extends AsyncTask<Void, Void, ArrayList<PlacesService.PlaceSearchPoint>>
         implements OnMarkerClickListener, OnInfoWindowClickListener{
@@ -206,6 +205,7 @@ public class PlaceSearch extends AsyncTask<Void, Void, ArrayList<PlacesService.P
     public void onInfoWindowClick(Marker marker) {
         PlacesService.PlaceSearchPoint p = markerPlaces.get(marker);
         Intent i = new Intent(context, com.logosprog.kyivguide.app.activities.PlaceDetails.class);
+        Log.i(TAG, "reference = " + p.getReference());
         i.putExtra("reference", p.getReference());
         context.startActivity(i);
 

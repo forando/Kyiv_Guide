@@ -4,16 +4,11 @@ import java.util.ArrayList;
 
 import android.app.*;
 
-//import android.support.v4.app.Fragment;
-//import android.support.v4.app.FragmentManager;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.support.v4.app.*;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -38,9 +33,6 @@ public class PlaceDetails extends FragmentActivity implements Map.MapListener {
     private final String TAG = getClass().getSimpleName();
 
     MapDelegate mapDelegate;
-
-    //private UiSettings mUiSettings;
-    //private GoogleMap mMap;
 
     Place place;
 
@@ -81,6 +73,8 @@ public class PlaceDetails extends FragmentActivity implements Map.MapListener {
         Intent intent = getIntent();
         String reference = intent.getExtras().getString("reference");
 
+        Log.i(TAG, "reference = " + reference);
+
         title = (TextView) findViewById(R.id.pd_formated_name);
         address = (TextView) findViewById(R.id.pd_formatted_address);
         //phone = (TextView) findViewById(R.id.pd_formated_phone);
@@ -95,16 +89,6 @@ public class PlaceDetails extends FragmentActivity implements Map.MapListener {
 
     }
 
-    /*@Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-
-        if (mMap != null) {
-            mUiSettings = mMap.getUiSettings();
-            mUiSettings.setCompassEnabled(false);
-        }
-    }*/
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -115,7 +99,6 @@ public class PlaceDetails extends FragmentActivity implements Map.MapListener {
     public void b_map_hide_OnClick(View v){
         mapViewHeight = mapView.getHeight();//åñëè çàïðîñèòü ýòó âåëè÷èíó äî åž ïîÿâëåíèÿ íà ýêðàíå òî îíà áóäåò = 0
         mapView.animate().translationY(mapViewHeight).setDuration(mapViewAnimTime);
-        //mMap.clear();
         mapDelegate.clearMap();
     }
 
@@ -123,11 +106,9 @@ public class PlaceDetails extends FragmentActivity implements Map.MapListener {
         RadioButton rb = (RadioButton)v;
         switch (rb.getId()) {
             case R.id.radio_driving:
-                //new getDirections(place, DirectionsService.MODE_DRIVING).execute();
                 mapDelegate.getDirections(place, DirectionsService.MODE_DRIVING);
                 break;
             case R.id.radio_walking:
-                //new getDirections(place, DirectionsService.MODE_WALKING).execute();
                 mapDelegate.getDirections(place, DirectionsService.MODE_WALKING);
                 break;
 		/*case R.id.radio_transit: new getDirections(place, DirectionsService.MODE_TRANSIT).execute();
@@ -215,38 +196,4 @@ public class PlaceDetails extends FragmentActivity implements Map.MapListener {
 
 
     }
-
-
-
-    /*private void initMap() {
-        mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map_places)).getMap();
-
-        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-
-            @Override
-            public void onMapClick(LatLng arg0) {
-                //delay_goBack(10000);
-
-            }
-        });
-
-        mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
-
-            @Override
-            public void onMapLongClick(LatLng arg0) {
-                //delay_goBack(10000);
-
-            }
-        });
-
-        mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
-
-            @Override
-            public void onCameraChange(CameraPosition arg0) {
-                //delay_goBack(10000);
-
-            }
-        });
-    }*/
-
 }

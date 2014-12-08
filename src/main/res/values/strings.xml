@@ -36,10 +36,12 @@
     <string name="title_activity_activity_fullscreen">ActivityFullscreen</string>
     <string name="title_activity_activity_place_details">Place Details</string>
     <string name="title_activity_maps">Maps</string>
+    <string name="title_activity_places">Places</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_maps_test">Map</string>
     <string name="title_activity_test">Test</string>
     <string name="search_button">search button</string>
     <string name="delete_button">delete button</string>
+    <string name="title_activity_fullscreen">FullscreenActivity</string>
 
 </resources>

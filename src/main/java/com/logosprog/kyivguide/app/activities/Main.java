@@ -90,12 +90,14 @@ public class Main extends Base {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
 
         createDirIfNotExists();
 
-        APP_MOVIE_URL = "android.resource://" + getPackageName() + "/" + R.raw.clipcanvas_14348_offline;
+        APP_MOVIE_URL = "android.resource://" + getPackageName() + "/" +
+                R.raw.clipcanvas_14348_offline;
 
         video = (VideoView) findViewById(R.id.video);
 
@@ -222,7 +224,7 @@ public class Main extends Base {
 
         // Set up an instance of SystemUiHider to control the system UI for
         // this activity.
-        mSystemUiHider = SystemUiHider.getInstance(this, contentView, HIDER_FLAGS);
+        /*mSystemUiHider = SystemUiHider.getInstance(this, contentView, HIDER_FLAGS);
         mSystemUiHider.setup();
         mSystemUiHider
                 .setOnVisibilityChangeListener(new SystemUiHider.OnVisibilityChangeListener() {
@@ -272,7 +274,7 @@ public class Main extends Base {
                     mSystemUiHider.show();
                 }
             }
-        });
+        });*/
 
         // Upon interacting with UI controls, delay any scheduled hide()
         // operations to prevent the jarring behavior of controls going away
@@ -376,8 +378,8 @@ public class Main extends Base {
 		String text = id == R.id.b_places ? "Places button Clicked" : "Nothing has been clicked";
 		Toast.makeText(ActivityMain.this, text, Toast.LENGTH_SHORT).show();
 		delayedHide(10000);*/
-        /*Intent intent = new Intent(this, Places.class);
-        startActivity(intent);*/
+        Intent intent = new Intent(this, Places.class);
+        startActivity(intent);
 
     }
 

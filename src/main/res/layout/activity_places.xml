@@ -3,12 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#fff"
-    tools:context=".ActivityPlaces" >
+    tools:context="com.logosprog.kyivguide.app.activities.Places" >
 
     <!--
          The primary full-screen view. This can be replaced with whatever view
          is needed to present your content, e.g. VideoView, SurfaceView,
-         TextureView, etc.-->
+         TextureView, etc.
+-->
     <LinearLayout
             android:id="@+id/fullscreen_content"
             style="?buttonBarStyle"

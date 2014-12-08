@@ -165,6 +165,7 @@ public class PlaceDetails extends AsyncTask<Void, Void, Place> implements OnMark
     public void onInfoWindowClick(Marker marker) {
         Place p = markerPlaces.get(marker);
         Intent i = new Intent(context, com.logosprog.kyivguide.app.activities.PlaceDetails.class);
+        Log.i(TAG, "reference = " + p.getReference());
         i.putExtra("reference", p.getReference());
         context.startActivity(i);
 

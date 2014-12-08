@@ -128,7 +128,6 @@ public class PlacesService {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
             ArrayList<ArrayList<String>> return_result = nearbySearch_processNextPageTokensHandler(tokens, urls);
@@ -136,7 +135,6 @@ public class PlacesService {
                 try {
                     Thread.sleep(2000);
                 } catch (InterruptedException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
                 return_result = nearbySearch_processNextPageTokensHandler(return_result.get(0), return_result.get(1));
@@ -363,7 +361,6 @@ public class PlacesService {
                     urlString.append("&pagetoken="
                             + URLEncoder.encode(pagetoken, "utf-8"));
                 } catch (UnsupportedEncodingException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
             }
@@ -381,7 +378,6 @@ public class PlacesService {
                     urlString.append("&pagetoken="
                             + URLEncoder.encode(pagetoken, "utf-8"));
                 } catch (UnsupportedEncodingException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
             }
@@ -401,7 +397,6 @@ public class PlacesService {
         try {
             urlString.append("&query=" + URLEncoder.encode(query, "utf-8"));
         } catch (UnsupportedEncodingException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         urlString.append("&sensor=false");
@@ -425,7 +420,6 @@ public class PlacesService {
         try {
             urlString.append("&input=" + URLEncoder.encode(input, "utf-8"));
         } catch (UnsupportedEncodingException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         urlString.append("&components=country:ge");
@@ -447,7 +441,6 @@ public class PlacesService {
         try {
             urlString.append("&input=" + URLEncoder.encode(input, "utf-8"));
         } catch (UnsupportedEncodingException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         urlString.append("&sensor=false");
