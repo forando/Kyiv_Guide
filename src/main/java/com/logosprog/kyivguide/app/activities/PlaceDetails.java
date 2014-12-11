@@ -111,9 +111,9 @@ public class PlaceDetails extends FragmentActivity implements Map.MapListener {
             case R.id.radio_walking:
                 mapDelegate.getDirections(place, DirectionsService.MODE_WALKING);
                 break;
-		/*case R.id.radio_transit: new getDirections(place, DirectionsService.MODE_TRANSIT).execute();
+		/*case R.id.radio_transit: new DirectionsExecutor(place, DirectionsService.MODE_TRANSIT).execute();
 		    break;
-		case R.id.radio_bicycling: new getDirections(place, DirectionsService.MODE_BICYCLING).execute();
+		case R.id.radio_bicycling: new DirectionsExecutor(place, DirectionsService.MODE_BICYCLING).execute();
 		    break;*/
 
             default:

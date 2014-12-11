@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
 import com.google.android.gms.maps.model.Marker;
 import com.logosprog.kyivguide.app.R;
+import com.logosprog.kyivguide.app.services.searchers.PlaceSearcher;
 
 public class AdapterInfoWindow  implements InfoWindowAdapter {
 
@@ -43,31 +44,31 @@ public class AdapterInfoWindow  implements InfoWindowAdapter {
     private void render(Marker marker, View view) {
         int badge;
         // Use the equals() method on a Marker to check for equals.  Do not use ==.
-        if (b_name.equals(PlaceSearch.PLACE_SEE)) {
+        if (b_name.equals(PlaceSearcher.PLACE_SEE)) {
             badge = R.drawable.ic_bubble_search_see;
-        } else if (b_name.equals(PlaceSearch.PLACE_ATTRACTIONS)) {
+        } else if (b_name.equals(PlaceSearcher.PLACE_ATTRACTIONS)) {
             badge = R.drawable.ic_bubble_search_attractions;
-        } else if (b_name.equals(PlaceSearch.PLACE_SHOPPING)) {
+        } else if (b_name.equals(PlaceSearcher.PLACE_SHOPPING)) {
             badge = R.drawable.ic_bubble_search_shopping;
-        } else if (b_name.equals(PlaceSearch.PLACE_BEAUTY)) {
+        } else if (b_name.equals(PlaceSearcher.PLACE_BEAUTY)) {
             badge = R.drawable.ic_bubble_search_beauty;
 
-        } else if (b_name.equals(PlaceSearch.PLACE_HOTELS)) {
+        } else if (b_name.equals(PlaceSearcher.PLACE_HOTELS)) {
             badge = R.drawable.ic_bubble_search_hotels;
-        } else if (b_name.equals(PlaceSearch.PLACE_CAFE)) {
+        } else if (b_name.equals(PlaceSearcher.PLACE_CAFE)) {
             badge = R.drawable.ic_bubble_search_cafe;
-        } else if (b_name.equals(PlaceSearch.PLACE_BARS)) {
+        } else if (b_name.equals(PlaceSearcher.PLACE_BARS)) {
             badge = R.drawable.ic_bubble_search_bars;
-        } else if (b_name.equals(PlaceSearch.PLACE_RESTAURANTS)) {
+        } else if (b_name.equals(PlaceSearcher.PLACE_RESTAURANTS)) {
             badge = R.drawable.ic_bubble_search_restaurants;
 
-        } else if (b_name.equals(PlaceSearch.PLACE_ATM)) {
+        } else if (b_name.equals(PlaceSearcher.PLACE_ATM)) {
             badge = R.drawable.ic_bubble_search_atm;
-        } else if (b_name.equals(PlaceSearch.PLACE_BANK)) {
+        } else if (b_name.equals(PlaceSearcher.PLACE_BANK)) {
             badge = R.drawable.ic_bubble_search_atm;
-        } else if (b_name.equals(PlaceSearch.PLACE_AIRPORT)) {
+        } else if (b_name.equals(PlaceSearcher.PLACE_AIRPORT)) {
             badge = R.drawable.ic_bubble_search_airport;
-        } else if (b_name.equals(PlaceSearch.PLACE_GAS)) {
+        } else if (b_name.equals(PlaceSearcher.PLACE_GAS)) {
             badge = R.drawable.ic_bubble_search_gas;
         } else {
             // Passing 0 to setImageResource will clear the image view.

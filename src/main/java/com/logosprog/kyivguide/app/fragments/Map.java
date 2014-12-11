@@ -1,7 +1,9 @@
 package com.logosprog.kyivguide.app.fragments;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
@@ -10,17 +12,25 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.view.animation.BounceInterpolator;
+import android.view.animation.Interpolator;
+import android.widget.Toast;
 import com.google.android.gms.maps.*;
 import com.google.android.gms.maps.model.*;
 import com.logosprog.kyivguide.app.App;
 import com.logosprog.kyivguide.app.R;
 import com.logosprog.kyivguide.app.fragments.delegates.MapDelegate;
 import com.logosprog.kyivguide.app.services.*;
+import com.logosprog.kyivguide.app.services.searchers.PlaceSearchPoint;
+import com.logosprog.kyivguide.app.services.searchers.PlaceSearchQueryExecutor;
+import com.logosprog.kyivguide.app.services.searchers.PlaceSearcher;
+import com.logosprog.kyivguide.app.services.searchers.PlaceSearcherFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,11 +45,13 @@ import java.util.List;
  * create an instance of this fragment.
  *
  */
-public class Map extends SupportMapFragment implements MapDelegate {
+public class Map extends SupportMapFragment implements MapDelegate,
+        GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener {
 
     private static final String TAG = "MapFragment";
 
     Context activityContext;
+    Map mapContext;
 
     private static final String ARG_LATITUDE = "lat";
     private static final String ARG_LONGITUDE = "lon";
@@ -54,6 +66,8 @@ public class Map extends SupportMapFragment implements MapDelegate {
     private Location loc;
     private Location tempLocation;
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
+
+    HashMap<Marker, PlaceSearchPoint> markerPlaces;
 
     /**
      * Use this factory method to create a new instance of
@@ -82,6 +96,7 @@ public class Map extends SupportMapFragment implements MapDelegate {
             lat = getArguments().getDouble(ARG_LATITUDE);
             lon = getArguments().getDouble(ARG_LONGITUDE);
             activityContext = getActivity();
+            mapContext = this;
 
             /*if (loc != null) {
                 mMap.clear();
@@ -184,7 +199,7 @@ public class Map extends SupportMapFragment implements MapDelegate {
         currentLocation();
 
         CameraPosition cameraPosition = new CameraPosition.Builder()
-                .target(new LatLng(41.69275175761847, 44.81409441679716))
+                .target(new LatLng(lat, lon))
                         // .target(new LatLng(loc.getLatitude(), loc.getLongitude())) //
                         // Sets the center of the map to Mountain View
                 .zoom(14) // Sets the zoom
@@ -210,23 +225,24 @@ public class Map extends SupportMapFragment implements MapDelegate {
     }
 
     @Override
-    public void searchText(String text) {
-        new PlaceSearch(activityContext, PlacesService.TEXT_SEARCH, mMap, tempLocation,
-                text, "dummy_text").execute();
+    public void searchText(String input) {
+        //new PlaceSearchExecutor(PlaceSearcher.TEXT_SEARCH, input, "dummy_text").execute();
+        new PlaceSearchExecutor(input, "dummy_text").execute();
     }
 
     @Override
-    public void searchNearBy(String placeType, String buttonName) {
+    public void searchNearBy(String input, String placeType) {
         /*if (loc != null){
             mMap.clear();
-            new PlaceSearch(activityContext, PlacesService.NEARBY_SEARCH, mMap, tempLocation, placeType, buttonName).execute();
+            new PlaceSearch(activityContext, PlacesService.NEARBY_SEARCH, mMap, tempLocation, input, placeType).execute();
         }*/
-        new PlaceSearch(activityContext, PlacesService.NEARBY_SEARCH, mMap, tempLocation, placeType, buttonName).execute();
+        mMap.clear();
+        new PlaceSearchExecutor(PlaceSearcher.NEARBY_SEARCH, input, placeType).execute();
     }
 
     @Override
     public void getDirections(Place place, String mode) {
-        new getDirections(place, mode).execute();
+        new DirectionsExecutor(place, mode).execute();
     }
 
     private void currentLocation() {
@@ -273,7 +289,69 @@ public class Map extends SupportMapFragment implements MapDelegate {
 
     };
 
-    private class getDirections extends AsyncTask<Void, Void, List<List<HashMap<String,String>>>> {
+    private void addMarkersToMap(ArrayList<PlaceSearchPoint> arrayPlaces){
+
+
+        markerPlaces = new HashMap<Marker, PlaceSearchPoint>();
+        for (int i = 0; i < arrayPlaces.size(); i++) {
+
+            // Creating a marker
+            MarkerOptions markerOptions = new MarkerOptions();
+
+
+            // Setting the title for the marker.
+            markerOptions.title(arrayPlaces.get(i).getName());
+            // Setting the position for the marker
+            markerOptions.position(new LatLng(arrayPlaces.get(i).getLatitude(), arrayPlaces.get(i).getLongitude()));
+            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.pin));
+            markerOptions.snippet(arrayPlaces.get(i).getVicinity());
+
+            // Placing a marker on the touched position
+            final Marker marker = mMap.addMarker(markerOptions);
+            markerPlaces.put(marker, arrayPlaces.get(i));
+        }
+    }
+
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        PlaceSearchPoint p = markerPlaces.get(marker);
+        Intent i = new Intent(activityContext, com.logosprog.kyivguide.app.activities.PlaceDetails.class);
+        Log.i(TAG, "reference = " + p.getReference());
+        i.putExtra("reference", p.getReference());
+        activityContext.startActivity(i);
+    }
+
+    @Override
+    public boolean onMarkerClick(final Marker marker) {
+        // This causes the marker to bounce into position when it is clicked.
+        final Handler handler = new Handler();
+        final long start = SystemClock.uptimeMillis();
+        final long duration = 1500;
+
+        final Interpolator interpolator = new BounceInterpolator();
+
+
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                long elapsed = SystemClock.uptimeMillis() - start;
+                float t = Math.max(1 - interpolator
+                        .getInterpolation((float) elapsed / duration), 0);
+                marker.setAnchor(0.5f, 1.0f + 2 * t);
+
+                if (t > 0.0) {
+                    // Post again 16ms later.
+                    handler.postDelayed(this, 16);
+                }
+            }
+        });
+        return false;
+    }
+
+
+    //============================AsyncTasks  BEGIN===========================================
+
+    private class DirectionsExecutor extends AsyncTask<Void, Void, List<List<HashMap<String,String>>>> {
 
         private DirectionsService directionsService;
 
@@ -281,7 +359,7 @@ public class Map extends SupportMapFragment implements MapDelegate {
         private final LatLng origin;
         private final LatLng dest;
 
-        public getDirections(Place _place, String _mode){
+        public DirectionsExecutor(Place _place, String _mode){
             this.origin = new LatLng(App.LATITUDE, App.LONGITUDE);
             this.dest = new LatLng(_place.getLatitude(), _place.getLongitude());
             this.place = _place;
@@ -352,6 +430,109 @@ public class Map extends SupportMapFragment implements MapDelegate {
         }
 
     }
+
+    private class PlaceSearchExecutor extends AsyncTask<Void, Void, ArrayList<PlaceSearchPoint>>{
+
+        private final String TAG = getClass().getSimpleName();
+
+        private ProgressDialog dialog;
+
+        private String searchAlgorithm;
+        private String input;
+        private String placeType;
+
+        public PlaceSearchExecutor(String searchAlgorithm, String input, String placeType){
+            this.searchAlgorithm = searchAlgorithm;
+            this.input = input;
+            this.placeType = placeType;
+        }
+
+        public PlaceSearchExecutor(String input, String placeType){
+            this(PlaceSearcher.TEXT_SEARCH, input, placeType);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            dialog = new ProgressDialog(activityContext);
+            dialog.setCancelable(false);
+            dialog.setMessage("Loading...");
+            dialog.isIndeterminate();
+            dialog.show();
+        }
+
+        @Override
+        protected ArrayList<PlaceSearchPoint> doInBackground(Void... voids) {
+            PlacesService service = new PlacesService(searchAlgorithm);
+            PlaceSearcher placeSearcher = PlaceSearcherFactory.newInstance(lat, lon, input, placeType);
+            //ArrayList<Place> arrayPlaces = service.findPlaces(loc.getLatitude(), loc.getLongitude(), places); // 28.632808   77.218276
+
+            ArrayList<PlaceSearchPoint> arrayPlaces = null;
+
+            if(searchAlgorithm.equals(PlaceSearcher.NEARBY_SEARCH)){
+                arrayPlaces = service.nearbySearch(loc.getLatitude(), loc.getLongitude(), input);
+            }else if(searchAlgorithm.equals(PlaceSearcher.TEXT_SEARCH)){
+                //arrayPlaces = service.textSearch(loc.getLatitude(), loc.getLongitude(), input);
+                arrayPlaces = placeSearcher.getPlaceSearchPointList();
+            }
+
+            if(arrayPlaces != null){
+                for (int i = 0; i < arrayPlaces.size(); i++) {
+
+                    PlaceSearchPoint placeDetail = arrayPlaces.get(i);
+                    Log.e(TAG, "places : " + placeDetail.getName());
+                }
+            }else{
+                Log.e(TAG, "places result is empty.");
+            }
+
+            return arrayPlaces;
+        }
+
+
+        @Override
+        protected void onPostExecute(ArrayList<PlaceSearchPoint> arrayPlaces) {
+            super.onPostExecute(arrayPlaces);
+
+            if (dialog.isShowing()) {
+                dialog.dismiss();
+            }
+            if(arrayPlaces != null){
+                addMarkersToMap(arrayPlaces);
+
+                // Setting an info window adapter allows us to change the both the contents and look of the
+                // info window.
+                mMap.setInfoWindowAdapter(new AdapterInfoWindow(activityContext, placeType));
+
+                // Set listeners for marker events.  See the bottom of this class for their behavior.
+                mMap.setOnMarkerClickListener(mapContext);
+                mMap.setOnInfoWindowClickListener(mapContext);
+
+					/*Log.e(TAG, "Long of 0 element = " + arrayPlaces.get(0).getLongitude() + "; Lat of 0 element = "
+							+ arrayPlaces.get(0).getLatitude());*/
+                CameraPosition cameraPosition;
+
+                try {//åñëè ðåçóëüòàòû = null òî êîä â áëîêå try âûäàñò îøèáêó
+                    cameraPosition = new CameraPosition.Builder()
+                            .target(new LatLng(arrayPlaces.get(0).getLatitude(), arrayPlaces.get(0).getLongitude())) // Sets the center of the map to Mountain View
+                            .zoom(14) // Sets the zoom
+                            .tilt(30) // Sets the tilt of the camera to 30 degrees
+                            .build();
+                } catch (Exception e) {
+                    cameraPosition = new CameraPosition.Builder()
+                            .target(new LatLng(loc.getLatitude(), loc.getLongitude())) // Sets the center of the map to Mountain View 50.469356, 30.337684
+                            .zoom(14) // Sets the zoom
+                            .tilt(30) // Sets the tilt of the camera to 30 degrees
+                            .build(); // Creates a CameraPosition from the builder
+                }
+                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+            }else{
+                Toast.makeText(activityContext, "No Results Found.", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    //============================AsyncTasks END===========================================
 
     /**
      * This interface must be implemented by activities that contain this

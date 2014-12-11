@@ -16,6 +16,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.logosprog.kyivguide.app.App;
+import com.logosprog.kyivguide.app.services.searchers.PlaceSearchPoint;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,24 +37,6 @@ public class PlacesService {
 
     final static String TAG = "PlacesService";
 
-    //===================================================================================
-
-    /**
-     * The constant to define that Google Places "Nearby Search" algorithm must be applied.
-     * The only difference with "Text Search" is that "Text Search" returns "formatted_address"
-     * variable insted of "vicinity"
-     */
-    public static final String NEARBY_SEARCH = "NearbySearch";
-    /**
-     * The constant to define that Google Places "Text Search" algorithm must be applied.
-     * The only difference with "Nearby Search" is that "Nearby Search" returns "vicinity"
-     * variable insted of "formatted_address"
-     */
-    public static final String TEXT_SEARCH = "TextSearch";
-
-    //===================================================================================
-
-
     private String searchAlgorithm;
 
     private ArrayList<PlaceSearchPoint> arrayList;
@@ -65,13 +48,13 @@ public class PlacesService {
     public ArrayList<PlaceSearchPoint> nearbySearch(double latitude,
                                                     double longitude, String placeSpacification) {
 
-        double[] lat = { 41.711079, 41.794672, 41.673136, 41.697334 };
-        double[] lon = { 44.763536, 44.808748, 44.917645, 44.857607 };
-        String[] r = { "5500", "5500", "8700", "4000" };
+        double[] lat = { 50.420733, 50.384308, 50.420499, 50.482146, 50.484986, 50.399714, 50.353953 };
+        double[] lon = { 30.513979, 30.461483, 30.413246, 30.457191, 30.589714, 30.625763, 30.932350 };
+        String[] r = { "4000", "2000", "4000", "5000", "6000", "4000", "6000" };
         ArrayList<String> tokens = new ArrayList<String>();
         ArrayList<String> urls = new ArrayList<String>();
         arrayList = new ArrayList<PlaceSearchPoint>();
-        for (int k = 0; k < 4; k++) {
+        for (int k = 0; k < r.length; k++) {
             try {
                 JSONObject json = null;
                 String urlString;
@@ -105,7 +88,7 @@ public class PlacesService {
                     JSONArray jsonArray = json.getJSONArray("results");
                     for (int i = 0; i < jsonArray.length(); i++) {
                         PlaceSearchPoint placeSearchPoint = new PlaceSearchPoint(
-                                (JSONObject) jsonArray.get(i));
+                                (JSONObject) jsonArray.get(i), searchAlgorithm);
                         Log.v("Places Services ", "" + placeSearchPoint);
                         arrayList.add(placeSearchPoint);
                     }
@@ -166,7 +149,7 @@ public class PlacesService {
                     JSONArray jsonArray = json.getJSONArray("results");
                     for (int i = 0; i < jsonArray.length(); i++) {
                         PlaceSearchPoint placeSearchPoint = new PlaceSearchPoint(
-                                (JSONObject) jsonArray.get(i));
+                                (JSONObject) jsonArray.get(i), searchAlgorithm);
                         Log.v("Places Services ", "" + placeSearchPoint);
                         arrayList.add(placeSearchPoint);
                     }
@@ -223,7 +206,7 @@ public class PlacesService {
                         JSONArray jsonArray = json.getJSONArray("results");
                         for (int i = 0; i < jsonArray.length(); i++) {
                             PlaceSearchPoint placeSearchPoint = new PlaceSearchPoint(
-                                    (JSONObject) jsonArray.get(i));
+                                    (JSONObject) jsonArray.get(i), searchAlgorithm);
                             Log.v("Places Services ", "" + placeSearchPoint);
                             arrayList.add(placeSearchPoint);
                         }
@@ -266,7 +249,7 @@ public class PlacesService {
             JSONArray jsonArray = json.getJSONArray("results");
             for (int i = 0; i < jsonArray.length(); i++) {
                 PlaceSearchPoint placeSearchPoint = new PlaceSearchPoint(
-                        (JSONObject) jsonArray.get(i));
+                        (JSONObject) jsonArray.get(i), searchAlgorithm);
                 Log.v("Places Services ", "" + placeSearchPoint);
                 arrayList.add(placeSearchPoint);
             }
@@ -422,7 +405,7 @@ public class PlacesService {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        urlString.append("&components=country:ge");
+        urlString.append("&components=country:ua");
         urlString.append("&sensor=false");
         urlString.append("&key=" + App.API_KEY_WEB);
         urlString.append("&location=");
@@ -471,161 +454,5 @@ public class PlacesService {
             e.printStackTrace();
         }
         return content.toString();
-    }
-
-    public class PlaceSearchPoint {
-
-        String TAG = "PlaceSearchPoint";
-
-        JSONObject jsonPlaceSearchPoint;
-
-        private String id;
-        private String icon;
-        private String name;
-        private String vicinity;
-        private String formatted_address;
-        private Double latitude;
-        private Double longitude;
-
-        private String reference;
-
-        public PlaceSearchPoint(JSONObject jsonPoint) {
-
-            this.jsonPlaceSearchPoint = jsonPoint;
-
-            setId();
-            setIcon();
-            setLatitude();
-            setLongitude();
-            setName();
-            setVicinity();
-            setFormattedAddress();
-            setReference();
-        }
-
-        public String getId() {
-            return id;
-        }
-
-        private void setId() {
-            try {
-                this.id = jsonPlaceSearchPoint.getString("id");
-            } catch (JSONException ex) {
-                Logger.getLogger(PlaceSearchPoint.class.getName()).log(
-                        Level.SEVERE, null, ex);
-            }
-        }
-
-        public String getIcon() {
-            return icon;
-        }
-
-        private void setIcon() {
-            try {
-                this.icon = jsonPlaceSearchPoint.getString("icon");
-            } catch (JSONException ex) {
-                Logger.getLogger(PlaceSearchPoint.class.getName()).log(
-                        Level.SEVERE, null, ex);
-            }
-        }
-
-        public Double getLatitude() {
-            return latitude;
-        }
-
-        private void setLatitude() {
-            try {
-                JSONObject geometry = (JSONObject) jsonPlaceSearchPoint
-                        .get("geometry");
-                JSONObject location = (JSONObject) geometry.get("location");
-                this.latitude = (Double) location.get("lat");
-            } catch (JSONException ex) {
-                Logger.getLogger(PlaceSearchPoint.class.getName()).log(
-                        Level.SEVERE, null, ex);
-            }
-        }
-
-        public Double getLongitude() {
-            return longitude;
-        }
-
-        private void setLongitude() {
-            try {
-                JSONObject geometry = (JSONObject) jsonPlaceSearchPoint.get("geometry");
-                JSONObject location = (JSONObject) geometry.get("location");
-                this.longitude = (Double) location.get("lng");
-            } catch (JSONException ex) {
-                Logger.getLogger(PlaceSearchPoint.class.getName()).log(
-                        Level.SEVERE, null, ex);
-            }
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        private void setName() {
-            try {
-                this.name = jsonPlaceSearchPoint.getString("name");
-            } catch (JSONException ex) {
-                Logger.getLogger(PlaceSearchPoint.class.getName()).log(
-                        Level.SEVERE, null, ex);
-            }
-        }
-
-        public String getVicinity() {
-            return vicinity;
-        }
-
-        private void setVicinity() {
-            try {
-                if(searchAlgorithm.equals(NEARBY_SEARCH)){
-                    this.vicinity = jsonPlaceSearchPoint.getString("vicinity");
-                }else{
-                    this.vicinity = jsonPlaceSearchPoint.getString("formatted_address");
-                }
-            } catch (JSONException ex) {
-                Logger.getLogger(PlaceSearchPoint.class.getName()).log(
-                        Level.SEVERE, null, ex);
-            }
-        }
-
-        public String getFormattedAddress() {
-            return formatted_address;
-        }
-
-        private void setFormattedAddress() {
-            try {
-                if(searchAlgorithm.equals(NEARBY_SEARCH)){
-                    this.formatted_address = jsonPlaceSearchPoint.getString("vicinity");
-                }else{
-                    this.formatted_address = jsonPlaceSearchPoint.getString("formatted_address");
-                }
-            } catch (JSONException ex) {
-                Logger.getLogger(PlaceSearchPoint.class.getName()).log(
-                        Level.SEVERE, null, ex);
-            }
-        }
-
-        public String getReference() {
-            return reference;
-        }
-
-        private void setReference() {
-            try {
-                this.reference = jsonPlaceSearchPoint.getString("reference");
-            } catch (JSONException ex) {
-                Logger.getLogger(PlaceSearchPoint.class.getName()).log(
-                        Level.SEVERE, null, ex);
-            }
-        }
-
-        @Override
-        public String toString() {
-            return "Place{" + "id=" + id + ", icon=" + icon + ", name=" + name
-                    + ", latitude=" + latitude + ", longitude=" + longitude
-                    + '}';
-        }
-
     }
 }

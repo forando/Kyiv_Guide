@@ -54,11 +54,11 @@ public class App  extends Application{
     /**
      * The latitude of the City.
      */
-    public static final double LATITUDE =  41.69275175761847;
+    public static final double LATITUDE =  50.449853677749175;
     /**
      * The longitude of the City.
      */
-    public static final double LONGITUDE =  44.81409441679716;
+    public static final double LONGITUDE =  30.52301287651062;
 
     public SharedPreferences prefs;
     public SharedPreferences.Editor editor;

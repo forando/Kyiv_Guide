@@ -1,6 +1,5 @@
 package com.logosprog.kyivguide.app.activities;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 
@@ -8,40 +7,19 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
-import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
-import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.Intent;
-import android.location.Criteria;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.BounceInterpolator;
-import android.view.animation.Interpolator;
 import com.logosprog.kyivguide.app.App;
 import com.logosprog.kyivguide.app.R;
 import com.logosprog.kyivguide.app.fragments.Map;
 import com.logosprog.kyivguide.app.fragments.delegates.MapDelegate;
-import com.logosprog.kyivguide.app.services.AdapterInfoWindow;
-import com.logosprog.kyivguide.app.services.PlaceSearch;
-import com.logosprog.kyivguide.app.services.PlacesService;
+import com.logosprog.kyivguide.app.services.searchers.PlaceSearchPoint;
+import com.logosprog.kyivguide.app.services.searchers.PlaceSearcher;
 
 /**
  * Created by forando on 26.11.14.
@@ -62,7 +40,7 @@ public class Places extends FragmentActivity implements Map.MapListener {
     private Location tempLocation;*/
 
 
-    HashMap<Marker, PlacesService.PlaceSearchPoint> markerPlaces;
+    HashMap<Marker, PlaceSearchPoint> markerPlaces;
 
     View contentView;
     View controlsView;
@@ -214,64 +192,64 @@ public class Places extends FragmentActivity implements Map.MapListener {
 	}*/
 
     public void b2_OnClick (View v){
-        String b_name="";
-        String place_type = "restaurant";
+        String placeType="";
+        String input = "restaurant";
         switch(v.getId()){
             case R.id.b_place_see:
-                place_type = "point_of_interest|art_gallery|aquarium|park|church|museum|painter|rv_park|zoo";
-                b_name = PlaceSearch.PLACE_SEE;
+                input = "point_of_interest|art_gallery|aquarium|park|church|museum|painter|rv_park";
+                placeType = PlaceSearcher.PLACE_SEE;
                 break;
             case R.id.b_place_attractions:
-                place_type = "amusement_park|bowling_alley|casino|night_club";
-                b_name = PlaceSearch.PLACE_ATTRACTIONS;
+                input = "zoo|amusement_park|bowling_alley|casino|night_club";
+                placeType = PlaceSearcher.PLACE_ATTRACTIONS;
                 break;
             case R.id.b_place_shopping:
-                place_type = "shopping_mall|jewelry_store";
-                b_name = PlaceSearch.PLACE_SHOPPING;
+                input = "shopping_mall|jewelry_store";
+                placeType = PlaceSearcher.PLACE_SHOPPING;
                 break;
             case R.id.b_place_beauty:
-                place_type = "beauty_salon|spa";
-                b_name = PlaceSearch.PLACE_BEAUTY;
+                input = "beauty_salon|spa";
+                placeType = PlaceSearcher.PLACE_BEAUTY;
                 break;
             case R.id.b_place_hotels:
-                place_type = "lodging";
-                b_name = PlaceSearch.PLACE_HOTELS;
+                input = "lodging";
+                placeType = PlaceSearcher.PLACE_HOTELS;
                 break;
             case R.id.b_place_cafe:
-                place_type = "cafe";
-                b_name = PlaceSearch.PLACE_CAFE;
+                input = "cafe";
+                placeType = PlaceSearcher.PLACE_CAFE;
                 break;
             case R.id.b_place_bars:
-                place_type = "bar";
-                b_name = PlaceSearch.PLACE_BARS;
+                input = "bar";
+                placeType = PlaceSearcher.PLACE_BARS;
                 break;
             case R.id.b_place_restaurants:
-                place_type = "restaurant";
-                b_name = PlaceSearch.PLACE_RESTAURANTS;
+                input = "restaurant";
+                placeType = PlaceSearcher.PLACE_RESTAURANTS;
                 break;
             case R.id.b_place_atm:
-                place_type = "atm";
-                b_name = PlaceSearch.PLACE_ATM;
+                input = "atm";
+                placeType = PlaceSearcher.PLACE_ATM;
                 break;
             case R.id.b_place_bank:
-                place_type = "bank";
-                b_name = PlaceSearch.PLACE_BANK;
+                input = "bank";
+                placeType = PlaceSearcher.PLACE_BANK;
                 break;
             case R.id.b_place_airport:
-                place_type = "airport";
-                b_name = PlaceSearch.PLACE_AIRPORT;
+                input = "airport";
+                placeType = PlaceSearcher.PLACE_AIRPORT;
                 break;
             case R.id.b_place_gas:
-                place_type = "gas_station";
-                b_name = PlaceSearch.PLACE_GAS;
+                input = "gas_station";
+                placeType = PlaceSearcher.PLACE_GAS;
                 break;
         }
         /*if (loc != null) {
             mMap.clear();
-            //new GetPlaces(ActivityPlaces.this, place_type, b_name).execute();
-            new PlaceSearch(Places.this, PlacesService.NEARBY_SEARCH, mMap, tempLocation, place_type, b_name).execute();
+            //new GetPlaces(ActivityPlaces.this, input, placeType).execute();
+            new PlaceSearch(Places.this, PlacesService.NEARBY_SEARCH, mMap, tempLocation, input, placeType).execute();
         }*/
-        mapDelegate.searchNearBy(place_type, b_name);
+        mapDelegate.searchNearBy(input, placeType);
         togge_view(false);
     }
 

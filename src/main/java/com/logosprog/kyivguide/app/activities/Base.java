@@ -231,7 +231,6 @@ public class Base extends Activity{
             try {
                 this.httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
             } catch (UnsupportedEncodingException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
