@@ -28,7 +28,6 @@ import com.logosprog.kyivguide.app.R;
 import com.logosprog.kyivguide.app.fragments.delegates.MapDelegate;
 import com.logosprog.kyivguide.app.services.*;
 import com.logosprog.kyivguide.app.services.searchers.PlaceSearchPoint;
-import com.logosprog.kyivguide.app.services.searchers.PlaceSearchQueryExecutor;
 import com.logosprog.kyivguide.app.services.searchers.PlaceSearcher;
 import com.logosprog.kyivguide.app.services.searchers.PlaceSearcherFactory;
 
@@ -227,17 +226,17 @@ public class Map extends SupportMapFragment implements MapDelegate,
     @Override
     public void searchText(String input) {
         //new PlaceSearchExecutor(PlaceSearcher.TEXT_SEARCH, input, "dummy_text").execute();
-        new PlaceSearchExecutor(input, "dummy_text").execute();
+        new PlaceSearchExecutor(input).execute();
     }
 
     @Override
-    public void searchNearBy(String input, String placeType) {
+    public void searchNearBy(String placeType) {
         /*if (loc != null){
             mMap.clear();
             new PlaceSearch(activityContext, PlacesService.NEARBY_SEARCH, mMap, tempLocation, input, placeType).execute();
         }*/
         mMap.clear();
-        new PlaceSearchExecutor(PlaceSearcher.NEARBY_SEARCH, input, placeType).execute();
+        new PlaceSearchExecutor(PlaceSearcher.NEARBY_SEARCH, placeType).execute();
     }
 
     @Override
@@ -438,17 +437,15 @@ public class Map extends SupportMapFragment implements MapDelegate,
         private ProgressDialog dialog;
 
         private String searchAlgorithm;
-        private String input;
         private String placeType;
 
-        public PlaceSearchExecutor(String searchAlgorithm, String input, String placeType){
+        public PlaceSearchExecutor(String searchAlgorithm, String placeType){
             this.searchAlgorithm = searchAlgorithm;
-            this.input = input;
             this.placeType = placeType;
         }
 
-        public PlaceSearchExecutor(String input, String placeType){
-            this(PlaceSearcher.TEXT_SEARCH, input, placeType);
+        public PlaceSearchExecutor(String placeType){
+            this(PlaceSearcher.TEXT_SEARCH, placeType);
         }
 
         @Override
@@ -463,18 +460,19 @@ public class Map extends SupportMapFragment implements MapDelegate,
 
         @Override
         protected ArrayList<PlaceSearchPoint> doInBackground(Void... voids) {
-            PlacesService service = new PlacesService(searchAlgorithm);
-            PlaceSearcher placeSearcher = PlaceSearcherFactory.newInstance(lat, lon, input, placeType);
+            //PlacesService service = new PlacesService(searchAlgorithm);
+            PlaceSearcher placeSearcher = PlaceSearcherFactory.newInstance(lat, lon, placeType);
             //ArrayList<Place> arrayPlaces = service.findPlaces(loc.getLatitude(), loc.getLongitude(), places); // 28.632808   77.218276
 
-            ArrayList<PlaceSearchPoint> arrayPlaces = null;
+            if (placeSearcher == null) return null;
 
-            if(searchAlgorithm.equals(PlaceSearcher.NEARBY_SEARCH)){
-                arrayPlaces = service.nearbySearch(loc.getLatitude(), loc.getLongitude(), input);
+            ArrayList<PlaceSearchPoint> arrayPlaces = placeSearcher.getPlaceSearchPointList();
+
+            /*if(searchAlgorithm.equals(PlaceSearcher.NEARBY_SEARCH)){
+                //arrayPlaces = service.nearbySearch(loc.getLatitude(), loc.getLongitude(), input);
             }else if(searchAlgorithm.equals(PlaceSearcher.TEXT_SEARCH)){
                 //arrayPlaces = service.textSearch(loc.getLatitude(), loc.getLongitude(), input);
-                arrayPlaces = placeSearcher.getPlaceSearchPointList();
-            }
+            }*/
 
             if(arrayPlaces != null){
                 for (int i = 0; i < arrayPlaces.size(); i++) {

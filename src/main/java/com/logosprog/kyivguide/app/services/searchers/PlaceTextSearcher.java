@@ -9,30 +9,34 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
- * Created by forando on 11.12.14.
+ * Created by forando on 11.12.14.<br>
+ * A class that queries google.places API for objects using text search. <br>
+ *   ATTENTION! one text request considered as 10 category requests.
  */
 public class PlaceTextSearcher extends PlaceSearcher {
 
     private final String TAG = getClass().getSimpleName();
 
+    private String input;
+
     public PlaceTextSearcher(double latitude, double longitude, String input) {
-        super(latitude, longitude, input);
+        super(latitude, longitude);
+
+        this.input = input;
     }
 
     @Override
     public String createURLString() {
+        /*
+        ATTENTION! one request considered as 10
+         */
         StringBuilder urlString = new StringBuilder(
-                "https://maps.googleapis.com/maps/api/place/textsearch/json?");// ATTANTION
-        // one
-        // request
-        // considered
-        // as
-        // 10
+                "https://maps.googleapis.com/maps/api/place/textsearch/json?");
         try {
-            urlString.append("&query=" + URLEncoder.encode(input, "utf-8"));
+            urlString.append("&query=");
+            urlString.append(URLEncoder.encode(input, "utf-8"));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
@@ -42,10 +46,16 @@ public class PlaceTextSearcher extends PlaceSearcher {
         urlString.append(Double.toString(latitude));
         urlString.append(",");
         urlString.append(Double.toString(longitude));
-        urlString.append("&radius=15000");
+        urlString.append("&radius=");
+        urlString.append(radius);
         // urlString.append("&language=en");
         if (pageToken != null && !pageToken.equals("")) {
-            urlString.append("&pagetoken=" + pageToken);
+            try {
+                urlString.append("&pageToken=");
+                urlString.append(URLEncoder.encode(pageToken, "utf-8"));
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
         }
         return urlString.toString();
     }

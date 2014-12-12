@@ -28,7 +28,7 @@ public interface MapDelegate {
      * Provides objects of a specified type.
      * @param placeType One of a google.place specified place types see google docs.
      */
-    public void searchNearBy(String placeType, String buttonName);
+    public void searchNearBy(String placeType);
 
     /**
      * Provides polyline to show the way to get to the destination point.

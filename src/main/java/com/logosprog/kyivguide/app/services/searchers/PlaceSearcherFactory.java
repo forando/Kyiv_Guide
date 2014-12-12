@@ -1,15 +1,24 @@
 package com.logosprog.kyivguide.app.services.searchers;
 
 /**
- * Created by forando on 11.12.14.
- * Realizes Factory Method Pattern
+ * Created by forando on 11.12.14.<br>
+ * An Abstract class that realizes Factory Method Pattern
  */
-public class PlaceSearcherFactory {
+public abstract class PlaceSearcherFactory {
 
-    public static PlaceSearcher newInstance(double latitude, double longitude, String input, String placeType){
+    /**
+     * A static method that provides instance of
+     * {@link com.logosprog.kyivguide.app.services.searchers.PlaceSearcher} class
+     * @param latitude Object latitude
+     * @param longitude Object longitude
+     * @param placeType Object Category Type or Text Query
+     * @return corespondent instance of
+     * {@link com.logosprog.kyivguide.app.services.searchers.PlaceSearcher} class
+     */
+    public static PlaceSearcher newInstance(double latitude, double longitude, String placeType) {
         // Use the equals() method on a Marker to check for equals.  Do not use ==.
         if (placeType.equals(PlaceSearcher.PLACE_SEE)) {
-            return null;
+            return new PlaceSeeNearbySearcher(latitude, longitude);
         } else if (placeType.equals(PlaceSearcher.PLACE_ATTRACTIONS)) {
             return null;
         } else if (placeType.equals(PlaceSearcher.PLACE_SHOPPING)) {
@@ -33,8 +42,11 @@ public class PlaceSearcherFactory {
         } else if (placeType.equals(PlaceSearcher.PLACE_GAS)) {
             return null;
         } else {
-            // Passing 0 to setImageResource will clear the image view.
-            return new PlaceTextSearcher(latitude, longitude, input);
+            if (placeType.length()>2) {//expecting to have some text input that is more than 2 chars length
+                return new PlaceTextSearcher(latitude, longitude, placeType);
+            }else{
+                return null;
+            }
         }
     }
 }

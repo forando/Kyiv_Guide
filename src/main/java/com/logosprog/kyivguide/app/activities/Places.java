@@ -249,7 +249,7 @@ public class Places extends FragmentActivity implements Map.MapListener {
             //new GetPlaces(ActivityPlaces.this, input, placeType).execute();
             new PlaceSearch(Places.this, PlacesService.NEARBY_SEARCH, mMap, tempLocation, input, placeType).execute();
         }*/
-        mapDelegate.searchNearBy(input, placeType);
+        mapDelegate.searchNearBy(placeType);
         togge_view(false);
     }
 

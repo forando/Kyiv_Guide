@@ -326,7 +326,7 @@ public class PlacesService {
 
     // https://maps.googleapis.com/maps/api/place/search/json?location=28.632808,77.218276&radius=500&types=atm&sensor=false&key=apikey
     private String nearbySearchUrl(double latitude, double longitude, String r,
-                                   String place_type, String pagetoken) {
+                                   String place_type, String pageToken) {
         StringBuilder urlString = new StringBuilder(
                 "https://maps.googleapis.com/maps/api/place/search/json?");
 
@@ -339,10 +339,10 @@ public class PlacesService {
             // urlString.append("&language=en");
             urlString.append("&types=restaurant");
             urlString.append("&sensor=false&key=" + App.API_KEY_WEB);
-            if (pagetoken != null && !pagetoken.equals("")) {
+            if (pageToken != null && !pageToken.equals("")) {
                 try {
-                    urlString.append("&pagetoken="
-                            + URLEncoder.encode(pagetoken, "utf-8"));
+                    urlString.append("&pageToken="
+                            + URLEncoder.encode(pageToken, "utf-8"));
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
@@ -356,10 +356,10 @@ public class PlacesService {
             // urlString.append("&language=en");
             urlString.append("&types=" + place_type);
             urlString.append("&sensor=false&key=" + App.API_KEY_WEB);
-            if (pagetoken != null && !pagetoken.equals("")) {
+            if (pageToken != null && !pageToken.equals("")) {
                 try {
-                    urlString.append("&pagetoken="
-                            + URLEncoder.encode(pagetoken, "utf-8"));
+                    urlString.append("&pageToken="
+                            + URLEncoder.encode(pageToken, "utf-8"));
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }

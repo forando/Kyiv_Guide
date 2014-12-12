@@ -1,18 +1,14 @@
 package com.logosprog.kyivguide.app.services.searchers;
 
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.os.AsyncTask;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
- * Created by forando on 11.12.14.
+ * Created by forando on 11.12.14.<br>
+ *     Abstract class that defines google.places API query algorithm
  */
 public abstract class PlaceSearcher {
 
@@ -35,38 +31,36 @@ public abstract class PlaceSearcher {
 
     //============================================================================================
 
-    public static final String PLACE_SEE = "see";
-    public static final String PLACE_ATTRACTIONS = "attractions";
-    public static final String PLACE_SHOPPING = "shopPing";
-    public static final String PLACE_BEAUTY = "beauty";
+    public static final String PLACE_SEE = "0";
+    public static final String PLACE_ATTRACTIONS = "1";
+    public static final String PLACE_SHOPPING = "2";
+    public static final String PLACE_BEAUTY = "3";
 
-    public static final String PLACE_HOTELS = "hotels";
-    public static final String PLACE_CAFE = "cafe";
-    public static final String PLACE_BARS = "bars";
-    public static final String PLACE_RESTAURANTS = "restaurants";
+    public static final String PLACE_HOTELS = "4";
+    public static final String PLACE_CAFE = "5";
+    public static final String PLACE_BARS = "6";
+    public static final String PLACE_RESTAURANTS = "7";
 
-    public static final String PLACE_ATM = "atm";
-    public static final String PLACE_BANK = "bank";
-    public static final String PLACE_AIRPORT = "airport";
-    public static final String PLACE_GAS = "gas";
+    public static final String PLACE_ATM = "8";
+    public static final String PLACE_BANK = "9";
+    public static final String PLACE_AIRPORT = "10";
+    public static final String PLACE_GAS = "11";
 
     //============================================================================================
 
 
-    protected double latitude;
-    protected double longitude;
-    protected String input;
+    protected final double latitude;
+    protected final double longitude;
+    protected int radius;
     protected String pageToken = null;
 
     protected ArrayList<PlaceSearchPoint> arrayList;
 
-    protected ProgressDialog dialog;
-
-    public PlaceSearcher(double latitude, double longitude, String input){
+    public PlaceSearcher(double latitude, double longitude){
         this.latitude = latitude;
         this.longitude = longitude;
-        this.input = input;
 
+        radius = 15000;
         arrayList = new ArrayList<PlaceSearchPoint>();
     }
 
