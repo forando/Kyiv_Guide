@@ -131,6 +131,11 @@ public class PlaceDetails extends FragmentActivity implements Map.MapListener {
         mapView.animate().translationY(0).setDuration(mapViewAnimTime);//showing map
     }
 
+    @Override
+    public void OnMarkersAdded(int quantity) {
+        //dummy
+    }
+
     private class setContent extends AsyncTask <String, Void, Place>{
 
         ProgressDialog dialog;

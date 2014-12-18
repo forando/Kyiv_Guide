@@ -28,7 +28,7 @@ public class PlaceTextSearcher extends PlaceSearcher {
     }
 
     @Override
-    public String createURLString() {
+    public String createURLString(double latitude, double longitude, int radius) {
         /*
         ATTENTION! one request considered as 10
          */
@@ -61,9 +61,9 @@ public class PlaceTextSearcher extends PlaceSearcher {
     }
 
     @Override
-    public ArrayList<PlaceSearchPoint> getPlaceSearchPointList() {
+    public ArrayList<PlaceSearchPoint> getPlaces() {
 
-        String urlString = createURLString();
+        String urlString = createURLString(latitude, longitude, radius);
         Log.e(TAG, "URL: " + urlString);
         String result = executeQuery(urlString);
         System.out.println(result);
@@ -74,15 +74,15 @@ public class PlaceTextSearcher extends PlaceSearcher {
                 PlaceSearchPoint placeSearchPoint = new PlaceSearchPoint(
                         (JSONObject) jsonArray.get(i), TEXT_SEARCH);
                 Log.v("Places Services ", "" + placeSearchPoint);
-                arrayList.add(placeSearchPoint);
+                places.add(placeSearchPoint);
             }
-            // return arrayList;
+            // return places;
         } catch (JSONException e1) {
             e1.printStackTrace();
             // return null;
         }
-        if (arrayList.size() > 0) {
-            return arrayList;
+        if (places.size() > 0) {
+            return places;
         } else {
             return null;
         }

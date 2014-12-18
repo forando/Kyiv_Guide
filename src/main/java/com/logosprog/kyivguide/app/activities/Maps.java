@@ -69,4 +69,9 @@ public class Maps extends FragmentActivity implements Map.MapListener, Search.Se
     public void showMap() {
         //dummy
     }
+
+    @Override
+    public void OnMarkersAdded(int quantity) {
+        //dummy
+    }
 }

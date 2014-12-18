@@ -72,7 +72,7 @@ public class PlacesService {
 				 * jsonArray.length(); i++) { PlaceSearchPoint placeSearchPoint
 				 * = new PlaceSearchPoint((JSONObject) jsonArray.get(i));
 				 * Log.v("Places Services ", "" + placeSearchPoint);
-				 * arrayList.add(placeSearchPoint); } }
+				 * places.add(placeSearchPoint); } }
 				 *
 				 * } while (json.has("next_page_token"));
 				 */
@@ -99,7 +99,7 @@ public class PlacesService {
                         tokens.add(next_page_token);
                     }
                 }
-                // return arrayList;
+                // return places;
             } catch (JSONException e1) {
                 e1.printStackTrace();
                 // return null;
@@ -160,7 +160,7 @@ public class PlacesService {
                         Tokens.add(next_page_token);
                     }
                 }
-                // return arrayList;
+                // return places;
             } catch (JSONException e1) {
                 e1.printStackTrace();
                 // return null;
@@ -217,7 +217,7 @@ public class PlacesService {
                             Tokens.add(next_page_token);
                         }
                     }
-                    // return arrayList;
+                    // return places;
                 } catch (JSONException e1) {
                     e1.printStackTrace();
                     // return null;
@@ -253,7 +253,7 @@ public class PlacesService {
                 Log.v("Places Services ", "" + placeSearchPoint);
                 arrayList.add(placeSearchPoint);
             }
-            // return arrayList;
+            // return places;
         } catch (JSONException e1) {
             e1.printStackTrace();
             // return null;

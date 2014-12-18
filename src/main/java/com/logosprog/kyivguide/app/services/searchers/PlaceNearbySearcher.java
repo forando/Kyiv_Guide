@@ -44,7 +44,7 @@ public abstract class PlaceNearbySearcher extends PlaceSearcher {
                         PlaceSearchPoint placeSearchPoint = new PlaceSearchPoint(
                                 (JSONObject) jsonArray.get(i), NEARBY_SEARCH);
                         Log.v("Places Services ", "" + placeSearchPoint);
-                        arrayList.add(placeSearchPoint);
+                        places.add(placeSearchPoint);
                     }
                     String next_page_token;
                     if (json.has("next_page_token")) {
@@ -53,7 +53,7 @@ public abstract class PlaceNearbySearcher extends PlaceSearcher {
                         Tokens.add(next_page_token);
                     }
                 }
-                // return arrayList;
+                // return places;
             } catch (JSONException e1) {
                 e1.printStackTrace();
                 // return null;

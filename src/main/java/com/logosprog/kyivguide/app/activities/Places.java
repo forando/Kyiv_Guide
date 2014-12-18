@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.widget.TextView;
 import com.google.android.gms.maps.model.Marker;
 
 
@@ -22,6 +23,7 @@ import com.logosprog.kyivguide.app.services.searchers.PlaceSearchPoint;
 import com.logosprog.kyivguide.app.services.searchers.PlaceSearcher;
 
 /**
+ * Activity to create and show strongly typed places
  * Created by forando on 26.11.14.
  */
 public class Places extends FragmentActivity implements Map.MapListener {
@@ -52,6 +54,8 @@ public class Places extends FragmentActivity implements Map.MapListener {
 
     App getApp;
 
+    TextView tv_quant;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +66,7 @@ public class Places extends FragmentActivity implements Map.MapListener {
 
         getApp = (App) getApplication();
 
+        tv_quant = (TextView) findViewById(R.id.places_quantity);
 
         //b_restaurant.setOnTouchListener(mDelayHideTouchListener);
 
@@ -299,6 +304,11 @@ public class Places extends FragmentActivity implements Map.MapListener {
     @Override
     public void showMap() {
 
+    }
+
+    @Override
+    public void OnMarkersAdded(int quantity) {
+        tv_quant.setText(String.valueOf(quantity));
     }
 
 /*

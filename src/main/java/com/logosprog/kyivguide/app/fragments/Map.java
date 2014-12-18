@@ -466,7 +466,7 @@ public class Map extends SupportMapFragment implements MapDelegate,
 
             if (placeSearcher == null) return null;
 
-            ArrayList<PlaceSearchPoint> arrayPlaces = placeSearcher.getPlaceSearchPointList();
+            ArrayList<PlaceSearchPoint> arrayPlaces = placeSearcher.getPlaces();
 
             /*if(searchAlgorithm.equals(PlaceSearcher.NEARBY_SEARCH)){
                 //arrayPlaces = service.nearbySearch(loc.getLatitude(), loc.getLongitude(), input);
@@ -523,6 +523,9 @@ public class Map extends SupportMapFragment implements MapDelegate,
                             .tilt(30) // Sets the tilt of the camera to 30 degrees
                             .build(); // Creates a CameraPosition from the builder
                 }
+
+                mListener.OnMarkersAdded(arrayPlaces.size());
+
                 mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
             }else{
                 Toast.makeText(activityContext, "No Results Found.", Toast.LENGTH_SHORT).show();
@@ -545,6 +548,7 @@ public class Map extends SupportMapFragment implements MapDelegate,
     public interface MapListener {
         public void registerMapDelegate(MapDelegate delegate);
         public void showMap();
+        public void OnMarkersAdded(int quantity);
     }
 
 }

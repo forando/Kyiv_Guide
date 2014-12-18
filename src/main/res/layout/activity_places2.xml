@@ -190,12 +190,18 @@
         android:layout_height="match_parent"
         android:fitsSystemWindows="true" >
 
+        <FrameLayout
+            android:id="@+id/places_frame_map"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"></FrameLayout>
         <LinearLayout
             style="?buttonBarStyle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="bottom|center_horizontal"
-            android:background="@color/black_overlay"
+            android:gravity="end|top"
             android:orientation="horizontal"
             tools:ignore="UselessParent" >
 
@@ -204,14 +210,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 class="com.google.android.gms.maps.MapFragment" />-->
+            <TextView
+                android:id="@+id/places_quantity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textSize="20sp"
+                android:textColor="@color/black_overlay"/>
         </LinearLayout>
-        <FrameLayout
-            android:id="@+id/places_frame_map"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"></FrameLayout>
 
         <FrameLayout
             android:id="@+id/map_hide_Bar"
