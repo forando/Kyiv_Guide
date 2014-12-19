@@ -201,7 +201,6 @@ public class Places extends FragmentActivity implements Map.MapListener {
         String input = "restaurant";
         switch(v.getId()){
             case R.id.b_place_see:
-                input = "point_of_interest|art_gallery|aquarium|park|church|museum|painter|rv_park";
                 placeType = PlaceSearcher.PLACE_SEE;
                 break;
             case R.id.b_place_attractions:
@@ -241,11 +240,9 @@ public class Places extends FragmentActivity implements Map.MapListener {
                 placeType = PlaceSearcher.PLACE_BANK;
                 break;
             case R.id.b_place_airport:
-                input = "airport";
                 placeType = PlaceSearcher.PLACE_AIRPORT;
                 break;
             case R.id.b_place_gas:
-                input = "gas_station";
                 placeType = PlaceSearcher.PLACE_GAS;
                 break;
         }

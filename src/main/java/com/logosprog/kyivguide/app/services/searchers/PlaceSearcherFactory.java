@@ -18,9 +18,9 @@ public abstract class PlaceSearcherFactory {
     public static PlaceSearcher newInstance(double latitude, double longitude, String placeType) {
         // Use the equals() method on a Marker to check for equals.  Do not use ==.
         if (placeType.equals(PlaceSearcher.PLACE_SEE)) {
-            return new PlaceSeeNearbySearcher(latitude, longitude);
+            return new PlaceNearbySearcherSee(latitude, longitude);
         } else if (placeType.equals(PlaceSearcher.PLACE_ATTRACTIONS)) {
-            return null;
+            return new PlaceNearbySearcherAttractions(latitude, longitude);
         } else if (placeType.equals(PlaceSearcher.PLACE_SHOPPING)) {
             return null;
         } else if (placeType.equals(PlaceSearcher.PLACE_BEAUTY)) {
@@ -38,9 +38,9 @@ public abstract class PlaceSearcherFactory {
         } else if (placeType.equals(PlaceSearcher.PLACE_BANK)) {
             return null;
         } else if (placeType.equals(PlaceSearcher.PLACE_AIRPORT)) {
-            return null;
+            return new PlaceNearbySearcherAirport(latitude, longitude);
         } else if (placeType.equals(PlaceSearcher.PLACE_GAS)) {
-            return null;
+            return new PlaceNearbySearcherGas(latitude, longitude);
         } else {
             if (placeType.length()>2) {//expecting to have some text input that is more than 2 chars length
                 return new PlaceTextSearcher(latitude, longitude, placeType);

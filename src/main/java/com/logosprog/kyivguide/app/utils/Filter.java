@@ -9,6 +9,6 @@ import java.util.ArrayList;
  */
 public interface Filter<T> {
 
-    public ArrayList<T> doFilter();
+    public ArrayList<T> filter();
     
 }
