@@ -3,6 +3,8 @@ package com.logosprog.kyivguide.app.services.searchers;
 import java.util.ArrayList;
 
 /**
+ * A class that queries google.places API for attraction objects.<br>
+ *
  * Created by forando on 19.12.14.
  */
 public class PlaceNearbySearcherAttractions extends PlaceNearbySearcher {

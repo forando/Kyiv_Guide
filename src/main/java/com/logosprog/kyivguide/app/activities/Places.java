@@ -204,35 +204,27 @@ public class Places extends FragmentActivity implements Map.MapListener {
                 placeType = PlaceSearcher.PLACE_SEE;
                 break;
             case R.id.b_place_attractions:
-                input = "zoo|amusement_park|bowling_alley|casino|night_club";
                 placeType = PlaceSearcher.PLACE_ATTRACTIONS;
                 break;
             case R.id.b_place_shopping:
-                input = "shopping_mall|jewelry_store";
                 placeType = PlaceSearcher.PLACE_SHOPPING;
                 break;
             case R.id.b_place_beauty:
-                input = "beauty_salon|spa";
                 placeType = PlaceSearcher.PLACE_BEAUTY;
                 break;
             case R.id.b_place_hotels:
-                input = "lodging";
                 placeType = PlaceSearcher.PLACE_HOTELS;
                 break;
             case R.id.b_place_cafe:
-                input = "cafe";
                 placeType = PlaceSearcher.PLACE_CAFE;
                 break;
             case R.id.b_place_bars:
-                input = "bar";
                 placeType = PlaceSearcher.PLACE_BARS;
                 break;
             case R.id.b_place_restaurants:
-                input = "restaurant";
                 placeType = PlaceSearcher.PLACE_RESTAURANTS;
                 break;
             case R.id.b_place_atm:
-                input = "atm";
                 placeType = PlaceSearcher.PLACE_ATM;
                 break;
             case R.id.b_place_bank:

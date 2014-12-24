@@ -22,21 +22,21 @@ public abstract class PlaceSearcherFactory {
         } else if (placeType.equals(PlaceSearcher.PLACE_ATTRACTIONS)) {
             return new PlaceNearbySearcherAttractions(latitude, longitude);
         } else if (placeType.equals(PlaceSearcher.PLACE_SHOPPING)) {
-            return null;
+            return new PlaceNearbySearcherShopping(latitude, longitude);
         } else if (placeType.equals(PlaceSearcher.PLACE_BEAUTY)) {
-            return null;
+            return new PlaceNearbySearcherBeauty(latitude, longitude);
         } else if (placeType.equals(PlaceSearcher.PLACE_HOTELS)) {
-            return null;
+            return new PlaceNearbySearcherHotels(latitude, longitude);
         } else if (placeType.equals(PlaceSearcher.PLACE_CAFE)) {
-            return null;
+            return new PlaceNearbySearcherCafe(latitude, longitude);
         } else if (placeType.equals(PlaceSearcher.PLACE_BARS)) {
-            return null;
+            return new PlaceNearbySearcherBar(latitude, longitude);
         } else if (placeType.equals(PlaceSearcher.PLACE_RESTAURANTS)) {
-            return null;
+            return new PlaceNearbySearcherRestaurant(latitude, longitude);
         } else if (placeType.equals(PlaceSearcher.PLACE_ATM)) {
-            return null;
+            return new PlaceNearbySearcherAtm(latitude, longitude);
         } else if (placeType.equals(PlaceSearcher.PLACE_BANK)) {
-            return null;
+            return new PlaceNearbySearcherBank(latitude, longitude);
         } else if (placeType.equals(PlaceSearcher.PLACE_AIRPORT)) {
             return new PlaceNearbySearcherAirport(latitude, longitude);
         } else if (placeType.equals(PlaceSearcher.PLACE_GAS)) {
