@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Handler;
 import android.support.v4.app.*;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -94,6 +95,37 @@ public class PlaceDetails extends FragmentActivity implements Map.MapListener {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.activity_place_details, menu);
         return true;
+    }
+
+    private void togge_view(boolean hide){
+        if (hide){
+            //controlsView.setVisibility(View.GONE);
+            mapView.animate().translationY(mapViewHeight).setDuration(mapViewAnimTime);
+            mapDelegate.clearMap();
+        }else{
+            mapView.animate().translationY(0).setDuration(mapViewAnimTime);
+            //controlsView.setVisibility(View.VISIBLE);
+            //delay_goBack(10000);
+        }
+    }
+
+    Handler mHideHandler = new Handler();
+    Runnable mHideRunnable = new Runnable() {
+        @Override
+        public void run() {
+            //togge_view(true);
+            mapViewHeight = mapView.getHeight();
+            togge_view(true);
+        }
+    };
+
+    /**
+     * Schedules a call to hide() in [delay] milliseconds, canceling any
+     * previously scheduled calls.
+     */
+    private void delay_mapHide(int delayMillis) {
+        mHideHandler.removeCallbacks(mHideRunnable);
+        mHideHandler.postDelayed(mHideRunnable, delayMillis);
     }
 
     public void b_map_hide_OnClick(View v){
@@ -194,6 +226,8 @@ public class PlaceDetails extends FragmentActivity implements Map.MapListener {
 
                 text_wrapper.invalidate();
                 photo_wrapper.invalidate();
+
+                delay_mapHide(0);
             }
 
         }

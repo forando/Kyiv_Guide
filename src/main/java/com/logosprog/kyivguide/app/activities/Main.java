@@ -96,8 +96,10 @@ public class Main extends Base {
 
         createDirIfNotExists();
 
+        /*APP_MOVIE_URL = "android.resource://" + getPackageName() + "/" +
+                R.raw.clipcanvas_14348_offline;*/
         APP_MOVIE_URL = "android.resource://" + getPackageName() + "/" +
-                R.raw.clipcanvas_14348_offline;
+                R.raw.kyiv1;
 
         video = (VideoView) findViewById(R.id.video);
 

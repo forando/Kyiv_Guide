@@ -24,8 +24,6 @@ public class Places extends FragmentActivity implements Map.MapListener {
 
     private final String TAG = getClass().getSimpleName();
 
-    //private String[] places;
-
     View contentView;
     View controlsView;
 
@@ -36,6 +34,8 @@ public class Places extends FragmentActivity implements Map.MapListener {
 
     TextView tv_quant;
 
+    String current_place_type = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,8 +45,6 @@ public class Places extends FragmentActivity implements Map.MapListener {
         getApp = (App) getApplication();
 
         tv_quant = (TextView) findViewById(R.id.places_quantity);
-
-        //places = getResources().getStringArray(R.array.places);
 
         controlsView = findViewById(R.id.fullscreen_content_controls);
         contentView = findViewById(R.id.fullscreen_content);
@@ -59,6 +57,12 @@ public class Places extends FragmentActivity implements Map.MapListener {
         Fragment map = Map.newInstance(App.LATITUDE, App.LONGITUDE);
         transaction.replace(R.id.places_frame_map, map, "map").commit();
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        delay_goBack(200);
     }
 
     public void b2_OnClick (View v){
@@ -101,7 +105,10 @@ public class Places extends FragmentActivity implements Map.MapListener {
                 placeType = PlaceSearcher.PLACE_GAS;
                 break;
         }
-        mapDelegate.searchNearBy(placeType);
+        if (!placeType.equals(current_place_type)) {
+            current_place_type = placeType;
+            mapDelegate.searchNearBy(current_place_type);
+        }
         togge_view(false);
     }
 

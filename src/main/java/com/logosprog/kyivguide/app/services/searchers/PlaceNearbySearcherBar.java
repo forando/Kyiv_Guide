@@ -16,7 +16,7 @@ public class PlaceNearbySearcherBar extends PlaceNearbySearcher {
     /**
      * Keys for some place types that must be filtered out from list of desired places.
      */
-    public static final String FILTER_KEYS = "";
+    public static final String FILTER_KEYS = "фитнес|sauna";
 
     public PlaceNearbySearcherBar(double latitude, double longitude) {
         super(latitude, longitude, PLACE_TYPE);
@@ -25,8 +25,7 @@ public class PlaceNearbySearcherBar extends PlaceNearbySearcher {
     @Override
     public ArrayList<PlaceSearchPoint> getPlaces() {
         PlacesHolder places = new PlacesHolder(super.getPlaces());
-        //PlacesFilter placesFilter = new PlacesFilterOut(new PlacesFilterUnique(places), FILTER_KEYS);
-        PlacesFilter placesFilter = new PlacesFilterUnique(places);
+        PlacesFilter placesFilter = new PlacesFilterOut(new PlacesFilterUnique(places), FILTER_KEYS);
         return placesFilter.filter();
     }
 }

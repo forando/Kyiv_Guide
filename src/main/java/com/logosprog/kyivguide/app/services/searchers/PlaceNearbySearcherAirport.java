@@ -17,7 +17,7 @@ public class PlaceNearbySearcherAirport extends PlaceNearbySearcher {
      * Keys for some place types that must be filtered out from list of desired places.
      */
     public static final String FILTER_KEYS = "іванков|автосервис|auto|antonov|антонов|" +
-            "svyatosh|sviatosh|аренд|dnepr|transfer|mini";
+            "svyatosh|sviatosh|аренд|dnepr|transfer|mini|чайка|chaika|travel";
 
     public PlaceNearbySearcherAirport(double latitude, double longitude) {
         super(latitude, longitude, PLACE_TYPE);
